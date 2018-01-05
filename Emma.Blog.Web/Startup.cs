@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Emma.Blog.Web.Extensions;
+using Emma.Blog.Web.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace Emma.Blog.Web
 {
     public class Startup
@@ -21,25 +21,35 @@ namespace Emma.Blog.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            //启用cookie 验证方式
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options=>
-                {
-                    options.AccessDeniedPath = "/User/Login";
-                    options.LoginPath = "/User/Login";
-                    options.Events = new MyCookieEvents();
-                    options.Cookie = new Microsoft.AspNetCore.Http.CookieBuilder()
-                    {
-                        Name = "mytoken"
-                    };
-                });
 
+
+            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+            var jwt = new JwtSettings();
+            Configuration.Bind("JwtSettings", jwt);
+
+            services.AddMvc();
+        
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            }).AddCookie((opts) =>
+            {
+                opts.LoginPath = "/Account/Login";
+                opts.Cookie.Name = "JwtCookie";
+                opts.TicketDataFormat = new JwtDataFormat(jwt);
+
+
+            });
+            //services.AddAuthorization();//授权，认可；批准，委任
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -49,9 +59,14 @@ namespace Emma.Blog.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
-            app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseStaticFiles();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
