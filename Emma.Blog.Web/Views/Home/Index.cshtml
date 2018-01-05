@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>主页</h1>
+<button id="btn">跨域测试</button>
+
+@section scripts{ 
+    <script>
+        $.ajax({
+            url: "http://localhost:21222/api/values",
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+
+            }
+
+        })
+    </script>
+}
