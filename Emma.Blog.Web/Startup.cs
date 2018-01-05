@@ -1,4 +1,5 @@
-﻿using Emma.Blog.Web.Extensions;
+﻿using Emma.Blog.Service.Auth;
+using Emma.Blog.Web.Extensions;
 using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;

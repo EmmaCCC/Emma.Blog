@@ -1,97 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Emma.Blog.Web.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Emma.Blog.Service.Auth;
+using Emma.Blog.Service.RegisterLogin;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace Emma.Blog.Web.Controllers
 {
-    public class Person
+    public class AccountController : Controller
     {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-    public class UserController : Controller
-    {
-        public IActionResult Login()
+        private readonly JwtSettings _jwtSettings;
+        public AccountController(IOptions<JwtSettings> jwtSettingsOptions)
         {
-            return View();
+            _jwtSettings = jwtSettingsOptions.Value;
+        }
+        public IActionResult Jwt()
+        {
+
+            return Ok(_jwtSettings);
+
         }
 
+        public IActionResult Login()
+        {
+
+            return Content("登录界面");
+
+        }
 
         public IActionResult Auth(string returnUrl)
         {
-            List<Person> persons = new List<Person>()
+
+            AccountService service = new AccountService();
+
+            List<Claim> claims = service.Login("123","456").GetClaims();
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user, new AuthenticationProperties()
             {
-                new Person()
-                {
-                     Age =12,
-                     Name = "zhangsan"
-                },
-                new Person()
-                {
-                     Age =34,
-                     Name = "lisi"
-                },
-            };
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddSeconds(_jwtSettings.Expires)
+            });
 
-            List<Claim> claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name,"songlin"),
-                new Claim(ClaimTypes.Role,"Admin"),
-   
-                new Claim("Persons", Newtonsoft.Json.JsonConvert.SerializeObject(persons)),
-            };
+            return Redirect(returnUrl);
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            string s = UserType.Normal.ToString();
-
-            if (returnUrl != null)
-            {
-                return Redirect(returnUrl);
-            }
-            return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Leader,Admin")]
         public IActionResult Info()
         {
-            
-            //ViewBag.Name = HttpContext.User.Claims.First(a => a.Type == ClaimTypes.Name).Value;
-            //ViewBag.Role = HttpContext.User.Claims.First(a => a.Type == ClaimTypes.Role).Value;
-            //ViewBag.Persons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Person>>(HttpContext.User.Claims.First(a => a.Type == "Persons").Value);
-            return Content("Admin,Leader");
+            var isTrue = this.HttpContext.User.Identity.AuthenticationType;
+            return Ok(this.HttpContext.User.Identity.AuthenticationType);
+            //return Content("Leader,Admin");
+
         }
-
-
-        [MyAuth(Roles = new string[] { "Leader" })]
-        public IActionResult Leader()
-        {
-           
-            return Content("Leader");
-        }
-
-        [MyAuth(Roles = new string[] { "Admin" })]
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin()
         {
 
             return Content("Admin");
+
+        }
+        [Authorize(Roles = "Leader")]
+        public IActionResult Leader()
+        {
+
+            return Content("Leader");
+
         }
 
-        public IActionResult Logout()
+        public IActionResult Common()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return View();
+
+            return Content("Common");
+
         }
     }
 }
-

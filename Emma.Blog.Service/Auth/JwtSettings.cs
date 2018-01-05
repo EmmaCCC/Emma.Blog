@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Emma.Blog.WebApi.Models
+﻿namespace Emma.Blog.Service.Auth
 {
     public class JwtSettings
     {
