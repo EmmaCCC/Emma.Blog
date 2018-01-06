@@ -31,8 +31,8 @@ namespace Emma.Blog.WebApi.Controllers
 
         public IActionResult Token(string username, string password)
         {
-            AccountService service = new AccountService();
-            List<Claim> claims = service.Login("123", "456").GetClaims();
+
+            List<Claim> claims = new List<Claim>();
 
             var token = JwtTokenUtil.Encode(claims, _jwtSettings);
 
@@ -56,8 +56,8 @@ namespace Emma.Blog.WebApi.Controllers
             if (claimsPrincipal != null && claimsPrincipal.HasClaim(a => a.Type == "tokenType"))
             {
                 //重新签发
-                AccountService service = new AccountService();
-                List<Claim> claims = service.Login("123", "456").GetClaims();
+                List<Claim> claims = new List<Claim>();
+              
 
                 return Ok(new { token = "123" });
             }

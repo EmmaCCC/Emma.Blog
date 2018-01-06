@@ -1,10 +1,13 @@
-﻿using Emma.Blog.Service.Auth;
+﻿using Emma.Blog.Data;
+using Emma.Blog.Service.Auth;
+using Emma.Blog.Service.RegisterLogin;
 using Emma.Blog.Web.Extensions;
 using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,8 +31,15 @@ namespace Emma.Blog.Web
             var jwt = new JwtSettings();
             Configuration.Bind("JwtSettings", jwt);
 
+            DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
+           
+
             services.AddMvc();
-        
+            services.AddDbContext<BlogContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
+            
+                );
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -43,6 +53,9 @@ namespace Emma.Blog.Web
 
 
             });
+
+            services.AddScoped(typeof(AccountService));
+        
             //services.AddAuthorization();//授权，认可；批准，委任
         }
 

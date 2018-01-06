@@ -14,9 +14,11 @@ namespace Emma.Blog.Web.Controllers
     public class AccountController : Controller
     {
         private readonly JwtSettings _jwtSettings;
-        public AccountController(IOptions<JwtSettings> jwtSettingsOptions)
+        private AccountService _accountService;
+        public AccountController(IOptions<JwtSettings> jwtSettingsOptions, AccountService accountService)
         {
             _jwtSettings = jwtSettingsOptions.Value;
+            _accountService = accountService;
         }
         public IActionResult Jwt()
         {
@@ -35,9 +37,7 @@ namespace Emma.Blog.Web.Controllers
         public IActionResult Auth(string returnUrl)
         {
 
-            AccountService service = new AccountService();
-
-            List<Claim> claims = service.Login("123","456").GetClaims();
+            List<Claim> claims = _accountService.Login("123","456").GetClaims();
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user, new AuthenticationProperties()

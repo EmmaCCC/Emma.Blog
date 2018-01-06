@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Web", "Emma.Blog.Web\Emma.Blog.Web.csproj", "{BF606FD7-9D18-4C21-8551-46B109E9EF12}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.WebApi", "Emma.Blog.WebApi\Emma.Blog.WebApi.csproj", "{864E4666-6D3C-4775-A4EA-978C085EC75A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emma.Blog.Service", "Emma.Blog.Service\Emma.Blog.Service.csproj", "{5FA2EFEE-A16E-494D-9396-C19AED77E742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Service", "Emma.Blog.Service\Emma.Blog.Service.csproj", "{5FA2EFEE-A16E-494D-9396-C19AED77E742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emma.Blog.Data", "Emma.Blog.Data\Emma.Blog.Data.csproj", "{187EC576-D9EA-449C-9C52-0AD196C89CDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Data", "Emma.Blog.Data\Emma.Blog.Data.csproj", "{187EC576-D9EA-449C-9C52-0AD196C89CDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
