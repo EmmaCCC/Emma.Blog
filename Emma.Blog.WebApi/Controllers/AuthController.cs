@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Emma.Blog.Service.Auth;
-using Emma.Blog.Service.RegisterLogin;
 
 
 namespace Emma.Blog.WebApi.Controllers

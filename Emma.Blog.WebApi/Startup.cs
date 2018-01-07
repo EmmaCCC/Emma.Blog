@@ -13,7 +13,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Emma.Blog.Data;
+using Emma.Blog.Service;
 using Emma.Blog.Service.Auth;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Emma.Blog.WebApi
 {
@@ -29,10 +34,18 @@ namespace Emma.Blog.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
 
             var jwtSettings = new JwtSettings();
             Configuration.Bind("JwtSettings", jwtSettings);
+
+
+            services.AddDbContext<BlogContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
+
+            );
 
             services.AddAuthentication(opts =>
             {
@@ -41,7 +54,16 @@ namespace Emma.Blog.WebApi
                 
             })
             .AddJwtBearer(opts =>
-            {
+                {
+                    opts.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.HttpContext.Request.Cookies["JwtCookie"];
+                            return Task.CompletedTask;
+                        }
+                    };
+
                 opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                 {
                     ValidIssuer = jwtSettings.Issuer,
@@ -57,8 +79,9 @@ namespace Emma.Blog.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
+            MyHttpContext.ServiceProvider = svp;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,7 +91,7 @@ namespace Emma.Blog.WebApi
                 opts.AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:19042")
+                    .WithOrigins("http://localhost:19043")
             );
 
             app.UseAuthentication();

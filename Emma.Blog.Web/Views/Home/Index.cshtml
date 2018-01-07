@@ -3,15 +3,29 @@
 }
 
 <h1>主页</h1>
+@if (!Context.User.Identity.IsAuthenticated)
+{
+    <span>请登录,<a asp-action="Login" asp-controller="User">登录</a></span>
+}
+else
+{
+    <span>欢迎您,@Context.User.Identity.Name</span>
+
+}
+<h2>Id1:@ViewBag.Id1</h2>
+<h2>Id2:@ViewBag.Id2</h2>
 <button id="btn">跨域测试 @Context.Items["user"]</button>
 
-@section scripts{ 
+@section scripts{
     <script>
         $.ajax({
             url: "http://localhost:21222/api/values",
             type: 'post',
             contentType: 'application/json',
             dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (data) {
                 console.log(data);
 

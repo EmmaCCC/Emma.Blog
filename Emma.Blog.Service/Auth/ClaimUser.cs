@@ -6,32 +6,32 @@ using Emma.Blog.Data.Models;
 
 namespace Emma.Blog.Service.Auth
 {
-    public class ClaimUser : IClaimUser<Account>
+    public class ClaimUser : IClaimUser<Data.Models.User>
     {
-        private readonly Account _account;
-        public ClaimUser(Account account)
+        private readonly Data.Models.User _account;
+        public ClaimUser(Data.Models.User account)
         {
             _account = account;
         }
 
         public ClaimUser()
         {
-            _account = new Account();
+            _account = new Data.Models.User();
         }
         public List<Claim> GetClaims()
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Sid,_account.Id.ToString()),
+                new Claim(ClaimTypes.Sid,_account.UserId.ToString()),
                 new Claim(ClaimTypes.Name,_account.UserName),
-                new Claim(ClaimTypes.Role, _account.AccountType.ToString()),
+           
                 
             };
             return claims;
         }
 
 
-        public Account GetUser()
+        public Data.Models.User GetUser()
         {
             return _account;
         }

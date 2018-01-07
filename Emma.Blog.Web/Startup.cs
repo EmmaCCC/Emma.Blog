@@ -1,15 +1,20 @@
-﻿using Emma.Blog.Data;
+﻿using System;
+using Emma.Blog.Data;
+using Emma.Blog.Service;
+using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
-using Emma.Blog.Service.RegisterLogin;
+
 using Emma.Blog.Web.Extensions;
 using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Emma.Blog.Web
 {
@@ -26,18 +31,15 @@ namespace Emma.Blog.Web
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             var jwt = new JwtSettings();
             Configuration.Bind("JwtSettings", jwt);
 
-            DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
-           
 
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
-            
                 );
 
             services.AddAuthentication(options =>
@@ -47,23 +49,23 @@ namespace Emma.Blog.Web
 
             }).AddCookie((opts) =>
             {
-                opts.LoginPath = "/Account/Login";
+                opts.LoginPath = "/User/Login";
                 opts.Cookie.Name = "JwtCookie";
                 opts.TicketDataFormat = new JwtDataFormat(jwt);
 
 
             });
 
-            services.AddScoped(typeof(AccountService));
+            services.AddScoped(typeof(UserService));
         
             //services.AddAuthorization();//授权，认可；批准，委任
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
 
-
+            MyHttpContext.ServiceProvider = svp;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

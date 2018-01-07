@@ -12,7 +12,7 @@ namespace Emma.Blog.WebApi.Controllers
     {
         // GET api/values
         [HttpGet]
-        [Authorize(Roles = "admin2")]
+        [Authorize]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -26,10 +26,12 @@ namespace Emma.Blog.WebApi.Controllers
         }
 
         // POST api/values
+        [Authorize]
         [HttpPost]
         public IActionResult Post([FromBody]string value)
         {
-            return Ok(new { status = 0 });
+            var name = HttpContext.User.Identity.Name;
+            return Ok(new { status = 0,name });
         }
 
         // PUT api/values/5
