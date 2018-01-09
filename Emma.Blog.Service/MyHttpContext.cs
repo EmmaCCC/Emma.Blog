@@ -8,11 +8,6 @@ namespace Emma.Blog.Service
 
     public static class MyHttpContext
     {
-        public static IServiceProvider ServiceProvider;
-
-        static MyHttpContext()
-        { }
-
 
         public static HttpContext Current
         {

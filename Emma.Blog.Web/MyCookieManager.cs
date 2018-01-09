@@ -14,9 +14,9 @@ namespace Emma.Blog.Web
 
             foreach (var item in context.User.Claims)
             {
-                Console.WriteLine("==================claimstype:"+item.Type+",claimsValue:"+item.Value);
+                Console.WriteLine("==================claimstype:" + item.Type + ",claimsValue:" + item.Value);
             }
-            Console.WriteLine("AppendResponseCookie===================key:" + key+",value:"+value);
+            Console.WriteLine("AppendResponseCookie===================key:" + key + ",value:" + value);
 
             context.Response.Cookies.Append(key, value);
         }
@@ -29,7 +29,7 @@ namespace Emma.Blog.Web
         public string GetRequestCookie(HttpContext context, string key)
         {
             var cookieValue = context.Request.Cookies[key];
-            Console.WriteLine("GetRequestCookie==================="+key+",value="+cookieValue);
+            Console.WriteLine("GetRequestCookie===================" + key + ",value=" + cookieValue);
             return cookieValue;
         }
     }

@@ -81,7 +81,7 @@ namespace Emma.Blog.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
-            MyHttpContext.ServiceProvider = svp;
+            Service.ServiceProvider.Provider = svp;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

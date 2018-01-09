@@ -3,9 +3,7 @@ using Emma.Blog.Data;
 using Emma.Blog.Service;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
-
 using Emma.Blog.Web.Extensions;
-using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,7 +37,8 @@ namespace Emma.Blog.Web
 
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
+            options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
+          
                 );
 
             services.AddAuthentication(options =>
@@ -57,7 +56,7 @@ namespace Emma.Blog.Web
             });
 
             services.AddScoped(typeof(UserService));
-        
+
             //services.AddAuthorization();//授权，认可；批准，委任
         }
 
@@ -65,7 +64,7 @@ namespace Emma.Blog.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
 
-            MyHttpContext.ServiceProvider = svp;
+            Service.ServiceProvider.Provider = svp;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

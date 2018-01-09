@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Emma.Blog.Data;
-using Emma.Blog.Data.Models;
-using Emma.Blog.Service;
-using Microsoft.AspNetCore.Mvc;
+﻿using Emma.Blog.Data.Models;
+using Emma.Blog.Service.Account;
 using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Emma.Blog.Web.Controllers
 {
     public class HomeController : Controller
     {
-      
+        
         public IActionResult Index()
         {
+
+            UserService service = new UserService();
+
+            var claimUser = service.Register(new User()
+            {
+                 NickName = "mysql"
+            });
             return View();
         }
 
