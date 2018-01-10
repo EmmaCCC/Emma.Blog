@@ -12,7 +12,8 @@ namespace Emma.Blog.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<long>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
                     CreateTime = table.Column<DateTime>(nullable: false),
                     HeadImg = table.Column<string>(nullable: true),
                     NickName = table.Column<string>(nullable: true),
@@ -26,21 +27,22 @@ namespace Emma.Blog.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Articles",
+                name: "Posts",
                 columns: table => new
                 {
-                    ArticleId = table.Column<Guid>(nullable: false),
+                    PostId = table.Column<long>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
                     Content = table.Column<string>(nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: false),
                     Tag = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Articles", x => x.ArticleId);
+                    table.PrimaryKey("PK_Posts", x => x.PostId);
                     table.ForeignKey(
-                        name: "FK_Articles_Users_UserId",
+                        name: "FK_Posts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -48,15 +50,15 @@ namespace Emma.Blog.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_UserId",
-                table: "Articles",
+                name: "IX_Posts_UserId",
+                table: "Posts",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Emma.Blog.Data.Models
 {
+   
     public class User
     {
-        public Guid UserId { get; set; }
+        [DatabaseGenerated( DatabaseGeneratedOption.None)]
+        public long UserId { get; set; }
 
         [StringLength(100)]
         public string UserName { get; set; }

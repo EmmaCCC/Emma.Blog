@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Emma.Blog.Common\Emma.Blog.Common.csproj" />
     <ProjectReference Include="..\Emma.Blog.Data\Emma.Blog.Data.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Emma.Blog.Common;
 using Emma.Blog.Data;
 using Emma.Blog.Data.Models;
 using Emma.Blog.Service.Auth;
@@ -17,8 +18,9 @@ namespace Emma.Blog.Service.Account
 
         public IClaimUser<User> Register(User user)
         {
-
-            user.UserId = Guid.NewGuid();
+            dbContext.Database.EnsureCreated();
+        
+          
             user.CreateTime = DateTime.Now;
             dbContext.Add(user);
             dbContext.SaveChanges();

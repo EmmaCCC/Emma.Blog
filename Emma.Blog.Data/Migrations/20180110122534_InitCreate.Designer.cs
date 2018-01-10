@@ -4,26 +4,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
+using MySql.Data.EntityFrameworkCore.Storage.Internal;
 using System;
 
 namespace Emma.Blog.Data.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20180106112244_InitCreate")]
+    [Migration("20180110122534_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
-            modelBuilder.Entity("Emma.Blog.Data.Models.Article", b =>
+            modelBuilder.Entity("Emma.Blog.Data.Models.Post", b =>
                 {
-                    b.Property<Guid>("ArticleId")
+                    b.Property<long>("PostId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Content");
@@ -34,18 +32,18 @@ namespace Emma.Blog.Data.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<long>("UserId");
 
-                    b.HasKey("ArticleId");
+                    b.HasKey("PostId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Emma.Blog.Data.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<long>("UserId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreateTime");
@@ -67,10 +65,10 @@ namespace Emma.Blog.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Emma.Blog.Data.Models.Article", b =>
+            modelBuilder.Entity("Emma.Blog.Data.Models.Post", b =>
                 {
                     b.HasOne("Emma.Blog.Data.Models.User", "User")
-                        .WithMany("Articles")
+                        .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

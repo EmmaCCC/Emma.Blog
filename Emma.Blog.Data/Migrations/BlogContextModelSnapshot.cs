@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
+using MySql.Data.EntityFrameworkCore.Storage.Internal;
 using System;
 
 namespace Emma.Blog.Data.Migrations
@@ -17,23 +16,24 @@ namespace Emma.Blog.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("Emma.Blog.Data.Models.Post", b =>
                 {
-                    b.Property<Guid>("PostId")
+                    b.Property<long>("PostId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Content");
 
                     b.Property<DateTime>("CreateTime");
 
+                    b.Property<int>("ReadNumber");
+
                     b.Property<string>("Tag");
 
                     b.Property<string>("Title");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<long>("UserId");
 
                     b.HasKey("PostId");
 
@@ -44,7 +44,7 @@ namespace Emma.Blog.Data.Migrations
 
             modelBuilder.Entity("Emma.Blog.Data.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<long>("UserId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreateTime");

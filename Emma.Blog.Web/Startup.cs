@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Emma.Blog.Web.Models;
 
 namespace Emma.Blog.Web
 {
@@ -33,11 +34,11 @@ namespace Emma.Blog.Web
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             var jwt = new JwtSettings();
             Configuration.Bind("JwtSettings", jwt);
-
+         
 
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
-            options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"),b=>b.MigrationsAssembly("Emma.Blog.Web"))
+            options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
           
                 );
 

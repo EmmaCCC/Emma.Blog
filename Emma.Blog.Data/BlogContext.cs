@@ -12,6 +12,7 @@ namespace Emma.Blog.Data
         public Guid Id;
         public BlogContext(DbContextOptions<BlogContext> options) : base(options)
         {
+          
             Id = Guid.NewGuid();
         }
        
@@ -20,6 +21,12 @@ namespace Emma.Blog.Data
         public DbSet<Post> Posts { get; set; }
 
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+           
+            base.OnModelCreating(modelBuilder);
+
+        }
 
     }
 }

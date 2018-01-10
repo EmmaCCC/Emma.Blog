@@ -1,9 +1,0 @@
-
- 
-记录时间：2018-01-09 20:18:38,829 
-线程ID:[8] 
-日志级别：  ERROR 
-出错类：NETCorelog4net property: [(null)] - 
-错误描述：Emma.Blog.Web.Controllers.HomeController
- 
-System.Exception: 123

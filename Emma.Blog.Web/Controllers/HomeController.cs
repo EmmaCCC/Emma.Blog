@@ -1,9 +1,11 @@
-﻿using Emma.Blog.Data.Models;
+﻿using System;
+using Emma.Blog.Data.Models;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Emma.Blog.Common;
 
 namespace Emma.Blog.Web.Controllers
 {
@@ -14,11 +16,14 @@ namespace Emma.Blog.Web.Controllers
         {
 
             UserService service = new UserService();
-
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            ViewBag.Path = path;
             var claimUser = service.Register(new User()
             {
                  NickName = "mysql"
             });
+
+           
             return View();
         }
 

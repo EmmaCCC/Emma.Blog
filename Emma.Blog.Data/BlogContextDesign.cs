@@ -14,14 +14,15 @@ namespace Emma.Blog.Data
         {
             Directory.SetCurrentDirectory("..");//设置当前路径为当前解决方案的路径
             string appSettingBasePath = Directory.GetCurrentDirectory() + "/Emma.Blog.Web";//改成你的appsettings.json所在的项目名称
+
             var configBuilder = new ConfigurationBuilder()
                 .SetBasePath(appSettingBasePath)
                 .AddJsonFile("appsettings.json")
                 .Build();
 
             var builder = new DbContextOptionsBuilder<BlogContext>();
-            //builder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=Light;");
-            builder.UseSqlServer(configBuilder.GetConnectionString("BlogConnection"));
+   
+            builder.UseMySQL(configBuilder.GetConnectionString("MySqlConnection"));
             return new BlogContext(builder.Options);
           
         }
