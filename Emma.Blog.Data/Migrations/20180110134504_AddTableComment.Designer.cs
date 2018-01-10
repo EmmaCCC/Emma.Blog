@@ -10,9 +10,10 @@ using System;
 namespace Emma.Blog.Data.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    partial class BlogContextModelSnapshot : ModelSnapshot
+    [Migration("20180110134504_AddTableComment")]
+    partial class AddTableComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,15 +24,15 @@ namespace Emma.Blog.Data.Migrations
                     b.Property<long>("CommentId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime>("CreateTime");
-
-                    b.Property<int>("DeleteFlag");
+                    b.Property<long>("UserId");
 
                     b.Property<string>("Name");
 
-                    b.Property<long>("UserId");
+                    b.Property<string>("Content");
+
+                    b.Property<int>("DeleteFlag");
+
+                    b.Property<DateTime>("CreateTime");
 
                     b.HasKey("CommentId");
 
@@ -43,15 +44,15 @@ namespace Emma.Blog.Data.Migrations
                     b.Property<long>("PostId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime>("CreateTime");
-
                     b.Property<int>("ReadNumber");
 
                     b.Property<string>("Tag");
 
                     b.Property<string>("Title");
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("CreateTime");
 
                     b.Property<long>("UserId");
 
