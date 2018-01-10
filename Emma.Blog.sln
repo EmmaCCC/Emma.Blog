@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Service", "Emma.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Data", "Emma.Blog.Data\Emma.Blog.Data.csproj", "{187EC576-D9EA-449C-9C52-0AD196C89CDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emma.Blog.Common", "Emma.Blog.Common\Emma.Blog.Common.csproj", "{3D4AB4A4-B412-40BB-9DDD-ED0ECF955458}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Common", "Emma.Blog.Common\Emma.Blog.Common.csproj", "{3D4AB4A4-B412-40BB-9DDD-ED0ECF955458}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -37,7 +37,7 @@ namespace Emma.Blog.Web
 
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
+            options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"),b=>b.MigrationsAssembly("Emma.Blog.Web"))
           
                 );
 
