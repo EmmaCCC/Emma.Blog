@@ -15,13 +15,12 @@ namespace Emma.Blog.Web.Controllers
         public IActionResult Index()
         {
 
-            UserService service = new UserService();
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            ViewBag.Path = path;
-            var claimUser = service.Register(new User()
-            {
-                 NickName = "mysql"
-            });
+            //UserService service = new UserService();
+        
+            //var claimUser = service.Register(new User()
+            //{
+            //     NickName = "mysql"
+            //});
 
            
             return View();

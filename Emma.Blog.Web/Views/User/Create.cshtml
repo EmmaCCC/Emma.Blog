@@ -4,13 +4,14 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<h2>Create</h2>
 
 <h4>User</h4>
 <hr />
-<div class="row">
+<div class="row" id="app">
+    <div v-text="message"></div>
     <div class="col-md-4">
-        <form asp-action="Login">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
@@ -49,3 +50,14 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section scripts{
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message:'123'
+
+            }
+        });
+    </script>
+}

@@ -29,14 +29,14 @@ namespace Emma.Blog.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Create()
         {
             return View();
 
         }
 
         [HttpPost]
-        public IActionResult Login(User user)
+        public IActionResult Create(User user)
         {
             
                 UserService service = new UserService();
@@ -49,15 +49,27 @@ namespace Emma.Blog.Web.Controllers
                     ExpiresUtc = DateTime.UtcNow.AddSeconds(_jwtSettings.Expires)
                 });
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("List");
            
            
 
         }
 
-       
+        public IActionResult List()
+        {
+            UserService service = new UserService();
+            var list = service.GetPageList(1, 10);
+            return View(list);
+        }
 
-        [Authorize]
+        public IActionResult Delete(long id)
+        {
+            UserService service = new UserService();
+            service.Delete(id);
+            return RedirectToAction("List");
+        }
+
+
         public IActionResult Info()
         {
             return View();
