@@ -5,7 +5,7 @@
 <h1>主页</h1>
 @if (!Context.User.Identity.IsAuthenticated)
 {
-    <span>请登录,<a asp-action="Login" asp-controller="User">登录</a></span>
+    <span>请登录,<a asp-action="Create" asp-controller="User">登录</a></span>
 }
 else
 {

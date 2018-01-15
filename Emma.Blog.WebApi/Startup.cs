@@ -47,11 +47,14 @@ namespace Emma.Blog.WebApi
 
             );
 
+
+          
+
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                
+               
             })
             .AddJwtBearer(opts =>
                 {
