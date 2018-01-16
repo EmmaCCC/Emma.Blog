@@ -5,33 +5,68 @@
 <h1>主页</h1>
 @if (!Context.User.Identity.IsAuthenticated)
 {
-    <span>请登录,<a asp-action="Create" asp-controller="User">登录</a></span>
+    <span>请登录,<a asp-action="Login" asp-controller="User">登录</a></span>
 }
 else
 {
-    <span>欢迎您,@Context.User.Identity.Name</span>
+    <span>欢迎您,@Context.User.Identity.Name，<a asp-action="logout" asp-controller="User">注销</a></span>
 
 }
-<h2>Id1:@ViewBag.Id1</h2>
-<h2>Id2:@ViewBag.Id2</h2>
-<h2>@ViewBag.Path</h2>
-<button id="btn">跨域测试 @Context.Items["user"]</button>
+<div>
+    <a href="/user/create">添加用户</a>
+</div>
+<p>
+    <button id="btn">访问api获取用户信息 </button>
+</p>
+<p>
+    <button id="btn1">提交信息并返回 </button>
+    昵称：<input type="text" id="nickname"/>
+    年龄：<input type="text" id="age" />
+</p>
+<div id="info">
+    info....
+</div>
 
 @section scripts{
     <script>
-        $.ajax({
-            url: "http://localhost:21222/api/values",
-            type: 'post',
-            contentType: 'application/json',
+
+        $.ajaxSetup({
             dataType: 'json',
             xhrFields: {
                 withCredentials: true
             },
-            success: function (data) {
-                console.log(data);
+        });
 
-            }
+        $('#btn').click(function () {
+            $.ajax({
+                url: "http://localhost:21222/api/values",
+                type: 'post',
+                success: function (res) {
+                    $('#info').html(JSON.stringify(res));
 
-        })
+                },
+                error: function (res) {
+                    $('#info').html(JSON.stringify(res));
+                }
+            });
+
+        });
+
+
+        $('#btn1').click(function () {
+            $.ajax({
+                url: "http://localhost:21222/api/values/getdata",
+                type: 'post',
+                data: { nickname: $('#nickname').val(), age: $('#age').val() },
+                success: function (res) {
+                    $('#info').html(JSON.stringify(res));
+
+                },
+                error: function (res) {
+                    $('#info').html(JSON.stringify(res));
+                }
+            });
+
+        });
     </script>
 }

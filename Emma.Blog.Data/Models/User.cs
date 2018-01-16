@@ -12,10 +12,10 @@ namespace Emma.Blog.Data.Models
         [DatabaseGenerated( DatabaseGeneratedOption.None)]
         public long UserId { get; set; }
 
-        [StringLength(100)]
+        [StringLength(100),Required]
         public string UserName { get; set; }
 
-        [StringLength(100)]
+        [StringLength(100), Required]
         public string Password { get; set; }
 
         public string NickName { get; set; }

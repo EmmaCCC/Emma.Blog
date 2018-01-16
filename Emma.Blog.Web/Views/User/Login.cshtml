@@ -1,0 +1,61 @@
+﻿@model Emma.Blog.Data.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>用户登录</h2>
+
+<h4>请输入账号密码进行登录</h4>
+<hr />
+<div class="row" id="app">
+    <div id="msg" class="text-danger"></div>
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+         
+            <div class="form-group">
+                <input type="button" value="登录" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
+
+@section scripts{
+    <script>
+        $('input[type=button]').click(function () {
+
+            var data = {
+                username: $('input[name=UserName]').val(),
+                password: $('input[name=Password]').val()
+            }
+            $.ajax({
+                url: '/user/login',
+                type: 'post',
+                data: data,
+                success: function(res) {
+                    if (res.status === 1) {
+                        $('#msg').text(res.message);
+                    } else {
+                        window.location.href = '/';
+                    }
+                }
+            });
+      
+        })
+    </script>
+}

@@ -24,7 +24,6 @@ namespace Emma.Blog.Service.Auth
             {
                 new Claim(ClaimTypes.Sid,_account.UserId.ToString()),
                 new Claim(ClaimTypes.Name,_account.UserName),
-           
                 
             };
             return claims;

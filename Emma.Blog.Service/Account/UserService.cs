@@ -15,7 +15,12 @@ namespace Emma.Blog.Service.Account
 
         public IClaimUser<User> Login(string username, string password)
         {
-            return new ClaimUser(new User());
+            var user = context.First<User>(a => a.UserName == username && a.Password == password);
+            if (user == null)
+            {
+                throw new ErrorMsgException("用户名或密码错误");
+            }
+            return new ClaimUser(user);
         }
 
         public IClaimUser<User> Register(User user)
@@ -31,7 +36,6 @@ namespace Emma.Blog.Service.Account
         public List<User> GetPageList(int pageIndex, int pageSize)
         {
             var query = context.PageAsQuery<User, DateTime>(pageIndex, pageSize, out int totalCount, out int pageCount, u => true, true, u => u.CreateTime);
-
             var list = query.ToList();
             return list;
         }
@@ -39,15 +43,19 @@ namespace Emma.Blog.Service.Account
 
         public bool Delete(long id)
         {
-
             var user = context.Find<User>(id);
-
             if (user != null)
             {
                 context.Remove(user);
             }
-
             return context.SaveChanges() > 0;
+        }
+
+
+        public User GetUser(long id)
+        {
+            var user = context.Find<User>(id);
+            return user;
         }
     }
 }

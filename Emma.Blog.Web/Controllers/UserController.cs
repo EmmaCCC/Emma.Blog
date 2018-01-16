@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Security.Claims;
+using Emma.Blog.Data;
 
 
 namespace Emma.Blog.Web.Controllers
@@ -15,11 +16,13 @@ namespace Emma.Blog.Web.Controllers
     public class UserController : Controller
     {
         private readonly JwtSettings _jwtSettings;
-   
+        private readonly UserService service;
+
         public UserController(IOptions<JwtSettings> jwtSettingsAccessor)
         {
             _jwtSettings = jwtSettingsAccessor.Value;
-           
+            service = new UserService();
+
         }
         public IActionResult Jwt()
         {
@@ -38,33 +41,71 @@ namespace Emma.Blog.Web.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
-            
-                UserService service = new UserService();
-                var claimUser = service.Register(user);
 
+
+            var claimUser = service.Register(user);
+
+            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimUser.GetClaims(), CookieAuthenticationDefaults.AuthenticationScheme));
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties()
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddSeconds(_jwtSettings.Expires)
+            });
+
+            return RedirectToAction("List");
+
+
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult Login(User user)
+        {
+
+            //这里采用异步方式登录，返回json 信息，当然也可以采用同步
+            try
+            {
+                var claimUser = service.Login(user.UserName, user.Password);
                 var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimUser.GetClaims(), CookieAuthenticationDefaults.AuthenticationScheme));
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties()
                 {
                     IsPersistent = true,
                     ExpiresUtc = DateTime.UtcNow.AddSeconds(_jwtSettings.Expires)
                 });
+                return Json(new { status = 0 });
+            }
+            catch (ErrorMsgException ex)
+            {
+                return Json(new { status = 1, message = ex.Message });
+            }
 
-                return RedirectToAction("List");
-           
-           
+
+        }
+
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("index", "home");
 
         }
 
         public IActionResult List()
         {
-            UserService service = new UserService();
+
             var list = service.GetPageList(1, 10);
             return View(list);
         }
 
         public IActionResult Delete(long id)
         {
-            UserService service = new UserService();
             service.Delete(id);
             return RedirectToAction("List");
         }

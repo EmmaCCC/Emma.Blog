@@ -38,8 +38,8 @@ namespace Emma.Blog.Web
 
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
-            options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
-          
+            //options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
+            options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
                 );
 
             services.AddAuthentication(options =>
