@@ -13,7 +13,7 @@ namespace Emma.Blog.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-     
+        [SignatureRequired]
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -21,13 +21,13 @@ namespace Emma.Blog.WebApi.Controllers
         }
 
 
-     
+
         [Authorize]
         [HttpPost]
         public IActionResult Post()
         {
             var name = HttpContext.User.Identity.Name;
-            return Ok(new { status = 0,name});
+            return Ok(new { status = 0, name });
         }
 
 
