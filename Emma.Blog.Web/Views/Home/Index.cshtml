@@ -20,7 +20,7 @@ else
 </p>
 <p>
     <button id="btn1">提交信息并返回 </button>
-    昵称：<input type="text" id="nickname"/>
+    昵称：<input type="text" id="nickname" />
     年龄：<input type="text" id="age" />
 </p>
 <div id="info">
@@ -29,7 +29,7 @@ else
 
 @section scripts{
     <script>
-
+        var api_domain = "http://localhost:21222";
         $.ajaxSetup({
             dataType: 'json',
             xhrFields: {
@@ -37,9 +37,14 @@ else
             },
         });
 
+        $(document).ajaxSend(function (e, xhr, settings) {
+            settings.url = api_domain + settings.url;
+        })
+
+
         $('#btn').click(function () {
             $.ajax({
-                url: "http://localhost:21222/api/values",
+                url: "/api/values",
                 type: 'post',
                 success: function (res) {
                     $('#info').html(JSON.stringify(res));
@@ -55,7 +60,7 @@ else
 
         $('#btn1').click(function () {
             $.ajax({
-                url: "http://localhost:21222/api/values/getdata",
+                url: "/api/values/getdata",
                 type: 'post',
                 data: { nickname: $('#nickname').val(), age: $('#age').val() },
                 success: function (res) {
