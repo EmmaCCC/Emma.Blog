@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
-
+using Emma.Blog.Data;
 
 namespace Emma.Blog.WebApi.Controllers
 {
@@ -32,21 +32,28 @@ namespace Emma.Blog.WebApi.Controllers
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
 
         public IActionResult Token(string username, string password)
         {
-            UserService service = new UserService();
-            var claimUser = service.Login(username, password);
-            List<Claim> claims = claimUser.GetClaims();
-            //签发token
-            var token = JwtTokenUtil.Encode(claims, _jwtSettings);
+            try
+            {
+                UserService service = new UserService();
+                var claimUser = service.Login(username, password);
+                List<Claim> claims = claimUser.GetClaims();
+                //签发token
+                var token = JwtTokenUtil.Encode(claims, _jwtSettings);
 
-            //签发refreshtoken
-            claims.Add(new Claim("tokenType", "refresh"));
-            var refreshToken = JwtTokenUtil.Encode(claims, _jwtSettings);
+                //签发refreshtoken
+                claims.Add(new Claim("tokenType", "refresh"));
+                var refreshToken = JwtTokenUtil.Encode(claims, _jwtSettings);
 
-            return Ok(new { token, refreshToken });
+                return Ok(new { status = 0, token, refreshToken });
+            }
+            catch (ErrorMsgException ex)
+            {
+                return Ok(new { status = 1, message = ex.Message });
+            }
         }
 
 
@@ -68,13 +75,13 @@ namespace Emma.Blog.WebApi.Controllers
             //判断使用的是不是refreshtoken
             if (claimsPrincipal != null && claimsPrincipal.HasClaim(a => a.Type == "tokenType"))
             {
-              
+
                 //根据claim中的id再次从数据库找到user 使用最新的user信息重新签发token
                 var userId = claimsPrincipal.Claims.First(a => a.Type == ClaimTypes.Sid).Value;
                 var user = service.GetUser(Convert.ToInt64(userId));
 
                 //重新签发token和refreshtoken
-                List<Claim> claims =  new ClaimUser(user).GetClaims();
+                List<Claim> claims = new ClaimUser(user).GetClaims();
                 //签发token
                 var token = JwtTokenUtil.Encode(claims, _jwtSettings);
 
