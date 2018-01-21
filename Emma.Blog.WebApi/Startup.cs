@@ -44,18 +44,18 @@ namespace Emma.Blog.WebApi
 
 
             services.AddDbContext<BlogContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("BlogConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
 
             );
 
 
-          
+
 
             services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-               
+
             })
             .AddJwtBearer(opts =>
                 {
@@ -68,15 +68,15 @@ namespace Emma.Blog.WebApi
                         }
                     };
 
-                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                {
-                    ValidIssuer = jwtSettings.Issuer,
-                    ValidAudience = jwtSettings.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
-                };
+                    opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidAudience = jwtSettings.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                    };
 
 
-            });
+                });
 
             services.AddCors();
             services.AddMvc();
@@ -97,11 +97,15 @@ namespace Emma.Blog.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            List<string> origins = new List<string>();
+            Configuration.GetSection("Origins").Bind(origins);
+
             app.UseCors(opts =>
                 opts.AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:19043")
+                    .WithOrigins(origins.ToArray())
+                    .SetPreflightMaxAge(TimeSpan.FromDays(60))
             );
 
             app.UseAuthentication();
