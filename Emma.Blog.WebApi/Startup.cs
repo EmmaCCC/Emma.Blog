@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
+
 namespace Emma.Blog.WebApi
 {
     public class Startup
@@ -79,6 +80,9 @@ namespace Emma.Blog.WebApi
 
             services.AddCors();
             services.AddMvc();
+
+          
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,6 +107,9 @@ namespace Emma.Blog.WebApi
 
             app.UseAuthentication();
             app.UseMvc();
+
+         
+
         }
     }
 }
