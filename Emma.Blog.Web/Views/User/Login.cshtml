@@ -8,24 +8,24 @@
 
 <h4>请输入账号密码进行登录</h4>
 <hr />
-<div class="row" id="app">
+<div class="row" id="login">
     <div id="msg" class="text-danger"></div>
     <div class="col-md-4">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
+                <input asp-for="UserName" class="form-control" v-model="username"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" class="form-control" v-model="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-         
+
             <div class="form-group">
-                <input type="button" value="登录" class="btn btn-default" />
+                <input type="button" value="登录" class="btn btn-default" v-on:click="login(username,password)" />
             </div>
         </form>
     </div>
@@ -36,26 +36,52 @@
 </div>
 
 @section scripts{
+    
     <script>
-        $('input[type=button]').click(function () {
 
-            var data = {
-                username: $('input[name=UserName]').val(),
-                password: $('input[name=Password]').val()
-            }
-            $.ajax({
-                url: '/user/login',
-                type: 'post',
-                data: data,
-                success: function(res) {
-                    if (res.status === 1) {
-                        $('#msg').text(res.message);
-                    } else {
-                        window.location.href = '/';
-                    }
+        var vm = new Vue({
+            el: '#login',
+            data: {
+                username: '',
+                password:''
+            },
+            methods: {
+                login: function (username, password) {
+                    $.ajax({
+                        url: '/user/login',
+                        type: 'post',
+                        data: {username,password},
+                        success: function (res) {
+                            if (res.status === 1) {
+                                $('#msg').text(res.message);
+                            } else {
+                                window.location.href = '/';
+                            }
+                        }
+                    });
                 }
-            });
-      
-        })
+            }
+        });
+
+        //$('input[type=button]').click(function () {
+
+        //    var data = {
+        //        username: $('input[name=UserName]').val(),
+        //        password: $('input[name=Password]').val()
+        //    }
+        //    $.ajax({
+        //        url: '/user/login',
+        //        type: 'post',
+        //        data: data,
+        //        success: function (res) {
+        //            if (res.status === 1) {
+        //                $('#msg').text(res.message);
+        //            } else {
+        //                window.location.href = '/';
+        //            }
+        //        }
+        //    });
+
+        //})
     </script>
 }
