@@ -5,6 +5,7 @@ using Emma.Blog.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text;
 using Emma.Blog.Common;
 
 namespace Emma.Blog.Web.Controllers
@@ -14,7 +15,6 @@ namespace Emma.Blog.Web.Controllers
         
         public IActionResult Index()
         {
-           
             return View();
         }
 

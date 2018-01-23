@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -10,7 +11,7 @@
 else
 {
     <span>欢迎您,@Context.User.Identity.Name，<a asp-action="logout" asp-controller="User">注销</a></span>
-
+   
 }
 <div>
     <a href="/user/create">添加用户</a>
@@ -28,19 +29,8 @@ else
 </div>
 
 @section scripts{
+    <script src="~/js/common.js"></script>
     <script>
-        var api_domain = "http://localhost:21222";
-        $.ajaxSetup({
-            dataType: 'json',
-            xhrFields: {
-                withCredentials: true
-            },
-        });
-
-        $(document).ajaxSend(function (e, xhr, settings) {
-            settings.url = api_domain + settings.url;
-        })
-
 
         $('#btn').click(function () {
             $.ajax({

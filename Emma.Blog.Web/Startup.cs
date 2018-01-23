@@ -34,8 +34,8 @@ namespace Emma.Blog.Web
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             var jwt = new JwtSettings();
             Configuration.Bind("JwtSettings", jwt);
-         
 
+            services.AddSession();
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
             //options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
@@ -50,7 +50,7 @@ namespace Emma.Blog.Web
             }).AddCookie((opts) =>
             {
                 opts.LoginPath = "/User/Login";
-                opts.Cookie.Name = "JwtCookie";
+                opts.Cookie.Name = "token";
                 opts.TicketDataFormat = new JwtDataFormat(jwt);
 
 
@@ -82,7 +82,7 @@ namespace Emma.Blog.Web
 
             app.UseAuthentication();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

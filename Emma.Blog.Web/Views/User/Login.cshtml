@@ -15,7 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" v-model="username"/>
+                <input asp-for="UserName" class="form-control" v-model="username" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -36,52 +36,56 @@
 </div>
 
 @section scripts{
-    
+
+    <script src="~/js/common.js"></script>
     <script>
 
         var vm = new Vue({
             el: '#login',
             data: {
                 username: '',
-                password:''
+                password: ''
             },
             methods: {
                 login: function (username, password) {
                     $.ajax({
-                        url: '/user/login',
+                        url: '/api/auth/token',
                         type: 'post',
-                        data: {username,password},
+                        data: { username, password },
                         success: function (res) {
                             if (res.status === 1) {
                                 $('#msg').text(res.message);
                             } else {
                                 window.location.href = '/';
                             }
+                        }, error: function(res) {
+                            console.log(res);
                         }
                     });
                 }
             }
         });
+        console.log(vm);
 
-        //$('input[type=button]').click(function () {
+            //$('input[type=button]').click(function () {
 
-        //    var data = {
-        //        username: $('input[name=UserName]').val(),
-        //        password: $('input[name=Password]').val()
-        //    }
-        //    $.ajax({
-        //        url: '/user/login',
-        //        type: 'post',
-        //        data: data,
-        //        success: function (res) {
-        //            if (res.status === 1) {
-        //                $('#msg').text(res.message);
-        //            } else {
-        //                window.location.href = '/';
-        //            }
-        //        }
-        //    });
+            //    var data = {
+            //        username: $('input[name=UserName]').val(),
+            //        password: $('input[name=Password]').val()
+            //    }
+            //    $.ajax({
+            //        url: '/user/login',
+            //        type: 'post',
+            //        data: data,
+            //        success: function (res) {
+            //            if (res.status === 1) {
+            //                $('#msg').text(res.message);
+            //            } else {
+            //                window.location.href = '/';
+            //            }
+            //        }
+            //    });
 
-        //})
+            //})
     </script>
 }
