@@ -38,6 +38,10 @@ else
             $.ajax({
                 url: "/api/values",
                 type: 'post',
+                data: {
+                    username: '1123131313',
+                    password:'mima'
+                },
                 success: function (res) {
                     $('#info').html(JSON.stringify(res));
 
@@ -54,7 +58,18 @@ else
             $.ajax({
                 url: "/api/values/getdata",
                 type: 'post',
-                data: { nickname: $('#nickname').val(), age: $('#age').val() },
+                data: {
+                    user: {
+                        nickname: 'zhangsan',
+                        age: 2
+                    },
+                    book: {
+                        name: ".net core 跨平台",
+                        price: 25.85
+                    },
+                    imgUrls: ["http://www.baidu.com/1.jpg", "http://www.baidu.com/2.jpg"],
+                    name:'lisi'
+                },
                 success: function (res) {
                     $('#info').html(JSON.stringify(res));
 

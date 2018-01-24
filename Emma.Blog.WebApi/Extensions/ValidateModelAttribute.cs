@@ -12,6 +12,7 @@ namespace Emma.Blog.WebApi.Extensions
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var modelState = context.ModelState;
+            
             string msg = string.Empty;
             if (!modelState.IsValid)
             {

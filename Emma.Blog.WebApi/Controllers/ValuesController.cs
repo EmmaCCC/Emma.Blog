@@ -24,19 +24,19 @@ namespace Emma.Blog.WebApi.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post(string username,string password)
         {
             var name = HttpContext.User.Identity.Name;
 
-            return Ok(new { status = 0, name });
+            return Ok(new { status = 0, name, username, password });
         }
 
 
         [Authorize]
         [HttpPost("GetData"), ValidateModel]
-        public IActionResult GetData(UserViewModel model)
+        public IActionResult GetData(UserViewModel user, BookViewModel book,List<string> imgUrls,string name)
         {
-            return Ok(new { status = 0, model });
+            return Ok(new { status = 0, user,book,imgUrls,name });
         }
 
     }
