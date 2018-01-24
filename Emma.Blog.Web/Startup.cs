@@ -35,7 +35,7 @@ namespace Emma.Blog.Web
             var jwt = new JwtSettings();
             Configuration.Bind("JwtSettings", jwt);
 
-            services.AddSession();
+          
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
             //options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
@@ -82,7 +82,7 @@ namespace Emma.Blog.Web
 
             app.UseAuthentication();
             app.UseStaticFiles();
-            app.UseSession();
+    
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

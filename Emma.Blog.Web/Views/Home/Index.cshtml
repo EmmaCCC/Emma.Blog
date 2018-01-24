@@ -11,8 +11,10 @@
 else
 {
     <span>欢迎您,@Context.User.Identity.Name，<a asp-action="logout" asp-controller="User">注销</a></span>
-   
-}
+
+
+
+} <span>欢迎您,@ViewBag.ConId,@ViewBag.Ip</span>
 <div>
     <a href="/user/create">添加用户</a>
 </div>

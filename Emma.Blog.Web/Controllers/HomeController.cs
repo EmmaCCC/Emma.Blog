@@ -12,9 +12,11 @@ namespace Emma.Blog.Web.Controllers
 {
     public class HomeController : Controller
     {
-        
+
         public IActionResult Index()
         {
+            ViewBag.ConId = HttpContext.Connection.Id;
+                 ViewBag.Ip = HttpContext.Connection.RemoteIpAddress;
             return View();
         }
 

@@ -63,7 +63,7 @@ namespace Emma.Blog.WebApi
                     {
                         OnMessageReceived = context =>
                         {
-                            context.Token = context.HttpContext.Request.Cookies["token"];
+                            context.Token = context.HttpContext.Request.Cookies["JwtCookie"];
                             return Task.CompletedTask;
                         }
                     };

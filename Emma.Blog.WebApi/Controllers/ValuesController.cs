@@ -27,7 +27,7 @@ namespace Emma.Blog.WebApi.Controllers
         public IActionResult Post()
         {
             var name = HttpContext.User.Identity.Name;
-            HttpContext.Response.Cookies.Append("jss", "123");
+
             return Ok(new { status = 0, name });
         }
 
