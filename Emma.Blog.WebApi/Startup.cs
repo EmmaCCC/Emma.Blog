@@ -104,7 +104,7 @@ namespace Emma.Blog.WebApi
                     .WithOrigins(origins.ToArray())
                     .SetPreflightMaxAge(TimeSpan.FromDays(60))
             );
-
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc();
 
