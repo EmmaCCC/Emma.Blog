@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Data", "Emma.Blog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Common", "Emma.Blog.Common\Emma.Blog.Common.csproj", "{3D4AB4A4-B412-40BB-9DDD-ED0ECF955458}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emma.Blog.Web.FileUpload", "Emma.Blog.Web.FileUpload\Emma.Blog.Web.FileUpload.csproj", "{FEF9DC2D-40B9-47C4-BCEA-033D641A8C33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3D4AB4A4-B412-40BB-9DDD-ED0ECF955458}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D4AB4A4-B412-40BB-9DDD-ED0ECF955458}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D4AB4A4-B412-40BB-9DDD-ED0ECF955458}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEF9DC2D-40B9-47C4-BCEA-033D641A8C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEF9DC2D-40B9-47C4-BCEA-033D641A8C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEF9DC2D-40B9-47C4-BCEA-033D641A8C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEF9DC2D-40B9-47C4-BCEA-033D641A8C33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
