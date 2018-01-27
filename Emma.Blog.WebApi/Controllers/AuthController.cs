@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Emma.Blog.Common;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
 using Emma.Blog.Data;
@@ -43,7 +44,7 @@ namespace Emma.Blog.WebApi.Controllers
                 List<Claim> claims = claimUser.GetClaims();
                 //签发token
                 var token = JwtTokenUtil.Encode(claims, _jwtSettings);
-
+                
                 //签发refreshtoken
                 claims.Add(new Claim("tokenType", "refresh"));
                 var refreshToken = JwtTokenUtil.Encode(claims, _jwtSettings);
@@ -98,6 +99,32 @@ namespace Emma.Blog.WebApi.Controllers
             //如果refreshtoken 失效了 说明该用户已经一个月没有和你的应用交互了 所以设置为未授权让其重新登录
             return Unauthorized();
 
+        }
+
+
+        /// <summary>
+        /// 生成客户端唯一标识
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult ClientId()
+        {
+            try
+            {
+                RedisClient client = new RedisClient();
+                var id = Guid.NewGuid().ToString();
+                client.SetString(id, "", TimeSpan.FromDays(30));
+                HttpContext.Response.Cookies.Append("clientid", id,new Microsoft.AspNetCore.Http.CookieOptions()
+                {
+                      Expires = DateTimeOffset.Now.AddDays(30)
+                });
+
+                return Ok(new { status = 0,id = Guid.NewGuid()});
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = 1, message = ex.Message });
+            }
         }
 
 
