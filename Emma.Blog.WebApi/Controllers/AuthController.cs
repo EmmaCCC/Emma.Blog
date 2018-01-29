@@ -18,7 +18,7 @@ using Emma.Blog.WebApi.Models;
 namespace Emma.Blog.WebApi.Controllers
 {
 
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class AuthController : Controller
     {
 
@@ -34,7 +34,7 @@ namespace Emma.Blog.WebApi.Controllers
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Token")]
 
         public IActionResult Token(string username, string password, string clientId, string code)
         {
@@ -88,7 +88,7 @@ namespace Emma.Blog.WebApi.Controllers
         /// </summary>
         /// <param name="refreshToken"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost("RefreshToken")]
         public IActionResult RefreshToken(string refreshToken)
         {
             UserService service = new UserService();
@@ -125,14 +125,17 @@ namespace Emma.Blog.WebApi.Controllers
         /// 生成客户端唯一标识
         /// </summary>
         /// <returns></returns>
-        [HttpGet()]
+        [HttpGet("ClientId")]
         public IActionResult ClientId()
         {
             try
             {
                 RedisClient client = new RedisClient();
+                CheckCodeParam param = new CheckCodeParam();
+                param.IsRequired = false;
+                param.Code = "000000";
                 var id = Guid.NewGuid().ToString();
-                client.SetString(id, "", TimeSpan.FromDays(30));
+                client.SetString(id, JsonHelper.Serialize(param), TimeSpan.FromDays(30));
                 HttpContext.Response.Cookies.Append("clientid", id, new Microsoft.AspNetCore.Http.CookieOptions()
                 {
                     Expires = DateTimeOffset.Now.AddDays(30)
@@ -150,13 +153,18 @@ namespace Emma.Blog.WebApi.Controllers
         /// 检测是否需要验证码
         /// </summary>
         /// <returns></returns>
-        [HttpGet("requirecode")]
+        [HttpGet("RequireCode")]
         public IActionResult RequireCode(string clientId)
         {
             try
             {
                 var result = ValidateCode.IsRequired(clientId);
-                return Ok(new { status = 0, isRequired = result });
+                string code = string.Empty;
+                if (result)
+                {
+                    code = ValidateCode.GetCode(clientId);
+                }
+                return Ok(new { status = 0, data = new { isRequired = result, code } });
             }
             catch (Exception ex)
             {
@@ -168,7 +176,7 @@ namespace Emma.Blog.WebApi.Controllers
         /// 获取验证码
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getcode")]
+        [HttpGet("GetCode")]
         public IActionResult GetCode(string clientId)
         {
             try
