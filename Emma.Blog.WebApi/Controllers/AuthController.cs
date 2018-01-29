@@ -125,7 +125,7 @@ namespace Emma.Blog.WebApi.Controllers
         /// 生成客户端唯一标识
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet()]
         public IActionResult ClientId()
         {
             try

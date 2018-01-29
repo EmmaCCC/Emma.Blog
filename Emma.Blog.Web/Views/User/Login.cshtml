@@ -39,7 +39,21 @@
 
     <script src="~/js/common.js"></script>
     <script>
+        var clientId = getCookie('clientid');
+        if (!clientId) {
+            $.ajax({
+                url: '/api/auth/clientid',
+                type: 'get',
+                success: function (res) {
+                    if (res.status === 0) {
+                        clientId = res.data;
+                    }
+                }, error: function (res) {
+                    console.log(res);
+                }
+            });
 
+        }
         var vm = new Vue({
             el: '#login',
             data: {
@@ -51,7 +65,7 @@
                     $.ajax({
                         url: '/api/auth/token',
                         type: 'post',
-                        data: { username, password },
+                        data: { username, password, clientId },
                         success: function (res) {
                             if (res.status === 1) {
                                 $('#msg').text(res.message);
@@ -67,25 +81,12 @@
         });
         console.log(vm);
 
-            //$('input[type=button]').click(function () {
-
-            //    var data = {
-            //        username: $('input[name=UserName]').val(),
-            //        password: $('input[name=Password]').val()
-            //    }
-            //    $.ajax({
-            //        url: '/user/login',
-            //        type: 'post',
-            //        data: data,
-            //        success: function (res) {
-            //            if (res.status === 1) {
-            //                $('#msg').text(res.message);
-            //            } else {
-            //                window.location.href = '/';
-            //            }
-            //        }
-            //    });
-
-            //})
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
     </script>
 }
