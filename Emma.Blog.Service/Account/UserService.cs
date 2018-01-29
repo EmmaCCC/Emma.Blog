@@ -18,7 +18,7 @@ namespace Emma.Blog.Service.Account
             var user = context.First<User>(a => a.UserName == username && a.Password == password);
             if (user == null)
             {
-                throw new ErrorMsgException("用户名或密码错误");
+                return null;
             }
             return new ClaimUser(user);
         }

@@ -57,7 +57,7 @@ namespace Emma.Blog.Common
         public void SetString(string key, string value, TimeSpan? timeout = null)
         {
             _db.StringSet(key, value, timeout);
-
+           
         }
 
         public void Remove(string key)

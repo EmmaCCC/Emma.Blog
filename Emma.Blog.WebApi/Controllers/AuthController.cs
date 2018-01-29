@@ -13,6 +13,7 @@ using Emma.Blog.Common;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
 using Emma.Blog.Data;
+using Emma.Blog.WebApi.Models;
 
 namespace Emma.Blog.WebApi.Controllers
 {
@@ -35,16 +36,34 @@ namespace Emma.Blog.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
 
-        public IActionResult Token(string username, string password)
+        public IActionResult Token(string username, string password, string clientId, string code)
         {
             try
             {
+                if (!ValidateCode.ContainsClientId(clientId))
+                {
+                    return Unauthorized();
+                }
+                //验证是否需要验证码
+                if (ValidateCode.IsRequired(clientId))
+                {
+                    if (!ValidateCode.Check(clientId, code))
+                    {
+                        return Ok(new { status = 1, message = "验证码不正确" });
+                    }
+                }
+
                 UserService service = new UserService();
                 var claimUser = service.Login(username, password);
+                if (claimUser == null)
+                {
+                    string vcode = ValidateCode.GetCode(clientId);
+                    return Ok(new { status = 1, message = "用户名或者密码错误", data = code });
+                }
                 List<Claim> claims = claimUser.GetClaims();
                 //签发token
                 var token = JwtTokenUtil.Encode(claims, _jwtSettings);
-                
+
                 //签发refreshtoken
                 claims.Add(new Claim("tokenType", "refresh"));
                 var refreshToken = JwtTokenUtil.Encode(claims, _jwtSettings);
@@ -114,12 +133,12 @@ namespace Emma.Blog.WebApi.Controllers
                 RedisClient client = new RedisClient();
                 var id = Guid.NewGuid().ToString();
                 client.SetString(id, "", TimeSpan.FromDays(30));
-                HttpContext.Response.Cookies.Append("clientid", id,new Microsoft.AspNetCore.Http.CookieOptions()
+                HttpContext.Response.Cookies.Append("clientid", id, new Microsoft.AspNetCore.Http.CookieOptions()
                 {
-                      Expires = DateTimeOffset.Now.AddDays(30)
+                    Expires = DateTimeOffset.Now.AddDays(30)
                 });
 
-                return Ok(new { status = 0,id = Guid.NewGuid()});
+                return Ok(new { status = 0, data = Guid.NewGuid() });
             }
             catch (Exception ex)
             {
@@ -127,7 +146,41 @@ namespace Emma.Blog.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 检测是否需要验证码
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("requirecode")]
+        public IActionResult RequireCode(string clientId)
+        {
+            try
+            {
+                var result = ValidateCode.IsRequired(clientId);
+                return Ok(new { status = 0, isRequired = result });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = 1, message = ex.Message });
+            }
+        }
 
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getcode")]
+        public IActionResult GetCode(string clientId)
+        {
+            try
+            {
+                string code = ValidateCode.GetCode(clientId);
+                return Ok(new { status = 0, code });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { status = 1, message = ex.Message });
+            }
+        }
 
     }
 }
