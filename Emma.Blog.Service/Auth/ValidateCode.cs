@@ -18,7 +18,7 @@ namespace Emma.Blog.Service.Auth
         public static bool Check(string clientId, string code)
         {
 
-            string json = redisClient.GetString(clientId);
+            string json = redisClient.GetString(clientId+ "_code");
             if (string.IsNullOrEmpty(json))
             {
                 return true;
@@ -29,7 +29,7 @@ namespace Emma.Blog.Service.Auth
 
         public static bool IsRequired(string clientId)
         {
-            string json = redisClient.GetString(clientId);
+            string json = redisClient.GetString(clientId+"_code");
             if (string.IsNullOrEmpty(json))
             {
                 return false;
@@ -46,7 +46,7 @@ namespace Emma.Blog.Service.Auth
             CheckCodeParam param = new CheckCodeParam();
             param.Code = code;
             param.IsRequired = true;
-            redisClient.SetString(clientId, JsonHelper.Serialize(param), TimeSpan.FromMinutes(5));
+            redisClient.SetString(clientId+"_code", JsonHelper.Serialize(param), TimeSpan.FromMinutes(5));
             return code;
         }
 

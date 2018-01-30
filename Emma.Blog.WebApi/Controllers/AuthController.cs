@@ -14,6 +14,7 @@ using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
 using Emma.Blog.Data;
 using Emma.Blog.WebApi.Models;
+using Emma.Blog.WebApi.Extensions;
 
 namespace Emma.Blog.WebApi.Controllers
 {
@@ -34,31 +35,25 @@ namespace Emma.Blog.WebApi.Controllers
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpPost("Token")]
 
-        public IActionResult Token(string username, string password, string clientId, string code)
+        [HttpPost("Token")]
+        [CaptchaValidate]
+        public IActionResult Token(string username, string password)
         {
             try
             {
-                if (!ValidateCode.ContainsClientId(clientId))
-                {
-                    return Unauthorized();
-                }
-                //验证是否需要验证码
-                if (ValidateCode.IsRequired(clientId))
-                {
-                    if (!ValidateCode.Check(clientId, code))
-                    {
-                        return Ok(new { status = 1, message = "验证码不正确" });
-                    }
-                }
-
                 UserService service = new UserService();
                 var claimUser = service.Login(username, password);
                 if (claimUser == null)
                 {
-                    string vcode = ValidateCode.GetCode(clientId);
-                    return Ok(new { status = 1, message = "用户名或者密码错误", data = code });
+                    string clientId = HttpContext.Request.Cookies["clientId"];
+                    string code = ValidateCode.GetCode(clientId);
+                    return Ok(new
+                    {
+                        status = 1,
+                        message = "用户名或者密码错误",
+                        data = new { code }
+                    });
                 }
                 List<Claim> claims = claimUser.GetClaims();
                 //签发token
@@ -76,7 +71,11 @@ namespace Emma.Blog.WebApi.Controllers
             }
             catch (ErrorMsgException ex)
             {
-                return Ok(new { status = 1, message = ex.Message });
+                return Ok(new
+                {
+                    status = 1,
+                    message = ex.Message
+                });
             }
         }
 
@@ -136,7 +135,7 @@ namespace Emma.Blog.WebApi.Controllers
                 param.Code = "000000";
                 var id = Guid.NewGuid().ToString();
                 client.SetString(id, JsonHelper.Serialize(param), TimeSpan.FromDays(30));
-                HttpContext.Response.Cookies.Append("clientid", id, new Microsoft.AspNetCore.Http.CookieOptions()
+                HttpContext.Response.Cookies.Append("clientId", id, new Microsoft.AspNetCore.Http.CookieOptions()
                 {
                     Expires = DateTimeOffset.Now.AddDays(30)
                 });
@@ -154,10 +153,15 @@ namespace Emma.Blog.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("RequireCode")]
-        public IActionResult RequireCode(string clientId)
+        public IActionResult RequireCode()
         {
             try
             {
+                string clientId = HttpContext.Request.Cookies["clientId"];
+                if (string.IsNullOrEmpty(clientId))
+                {
+                    return Unauthorized();
+                }
                 var result = ValidateCode.IsRequired(clientId);
                 string code = string.Empty;
                 if (result)
@@ -177,12 +181,17 @@ namespace Emma.Blog.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetCode")]
-        public IActionResult GetCode(string clientId)
+        public IActionResult GetCode()
         {
             try
             {
+                string clientId = HttpContext.Request.Cookies["clientId"];
+                if (string.IsNullOrEmpty(clientId))
+                {
+                    return Unauthorized();
+                }
                 string code = ValidateCode.GetCode(clientId);
-                return Ok(new { status = 0, code });
+                return Ok(new { status = 0, data = new { code } });
             }
             catch (Exception ex)
             {

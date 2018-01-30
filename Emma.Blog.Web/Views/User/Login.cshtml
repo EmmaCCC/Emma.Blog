@@ -49,23 +49,27 @@
 
     
 
-        var clientId = getCookie('clientid');
+        var clientId = getCookie('clientId');
         var isRequireCode = false;
-        $.ajax({
-            url: '/api/auth/requirecode?clientId=' + clientId,
-            type: 'get',
-            success: function (res) {
-                if (res.status === 0) {
-                    isRequireCode = res.data.isRequired;
-                    if (isRequireCode) {
-                        $('#vcodeform').show();
+        if (clientId) {
+            $.ajax({
+                url: '/api/auth/requirecode',
+                type: 'get',
+                success: function (res) {
+                    if (res.status === 0) {
+                        isRequireCode = res.data.isRequired;
+                        if (isRequireCode) {
+                            $('#vcodeform').show();
+                        }
+                        $('#vcode').text(res.data.code);
                     }
-                    $('#vcode').text(res.data.code);
+                }, error: function (res) {
+                    console.log(res);
                 }
-            }, error: function (res) {
-                console.log(res);
-            }
-        });
+            });
+
+        }
+  
         if (!clientId) {
 
             var promise = new Promise(function (resolve, reject) {
@@ -136,11 +140,11 @@
                 },
                 getCode() {
                     $.ajax({
-                        url: '/api/auth/getcode?clientId=' + clientId,
+                        url: '/api/auth/getcode',
                         type: 'get',
                         success: function (res) {
                             if (res.status === 0) {
-                                $('#vcode').text(res.code);
+                                $('#vcode').text(res.data.code);
 
                             }
                         }, error: function (res) {
