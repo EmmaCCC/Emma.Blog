@@ -67,6 +67,7 @@ namespace Emma.Blog.WebApi.Controllers
                 HttpContext.Response.Cookies.Append("token", token, new Microsoft.AspNetCore.Http.CookieOptions()
                 {
                     Expires = DateTimeOffset.Now.AddHours(2),
+                    Domain = "*.songlin.net.cn"
                 }); //写回cookie 供web站点用
                 return Ok(new { status = 0, token, refreshToken });
             }

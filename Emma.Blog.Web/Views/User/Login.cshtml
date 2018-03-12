@@ -132,6 +132,7 @@
                                 $('#msg').text(res.message);
                                 $('#vcode').text(res.data.code);
                             } else {
+                                setCookie('token', res.token, 7200);
                                 window.location.href = '/';
                             }
                         }, error: function (res) {
@@ -163,6 +164,13 @@
                 return unescape(arr[2]);
             else
                 return null;
+        }
+
+        function setCookie(c_name, value, expire) {
+            var exdate = new Date()
+            exdate.setDate(exdate.getTime() + expire*1000)
+            document.cookie = c_name + "=" + escape(value) + ";path=/;"+
+                ((expire == null) ? "" : ";expires=" + exdate.toGMTString())
         }
     </script>
 }
