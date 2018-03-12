@@ -37,7 +37,7 @@ namespace Emma.Blog.Web
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
             .UseKestrel()
-             
+            
             .UseStartup<Startup>()
             .Build();
 

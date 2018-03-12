@@ -44,8 +44,8 @@ namespace Emma.Blog.WebApi
 
 
             services.AddDbContext<BlogContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
-
+                //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
+                options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
             );
 
 

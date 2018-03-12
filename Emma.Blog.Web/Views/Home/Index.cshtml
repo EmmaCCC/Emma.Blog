@@ -14,7 +14,7 @@ else
 
 
 
-} <span>欢迎您,@ViewBag.ConId,@ViewBag.Ip</span>
+} <span>欢迎您,@ViewBag.Ip</span>
 <div>
     <a href="/user/create">添加用户</a>
 </div>
@@ -29,77 +29,77 @@ else
 <div id="info">
     info....
 </div>
-<div>
-    <div id="uploader" class="wu-example">
-        <!--用来存放文件信息-->
-        <div id="thelist" class="uploader-list"></div>
-        <div class="btns">
-            <div id="picker">选择文件</div>
-            <button id="ctlBtn" class="btn btn-default">开始上传</button>
+@*<div>
+        <div id="uploader" class="wu-example">
+            <!--用来存放文件信息-->
+            <div id="thelist" class="uploader-list"></div>
+            <div class="btns">
+                <div id="picker">选择文件</div>
+                <button id="ctlBtn" class="btn btn-default">开始上传</button>
+            </div>
         </div>
-    </div>
- 
-</div>
-@section styles{ 
-<link href="~/lib/webuploader/webuploader.css" rel="stylesheet" />
+
+    </div>*@
+@section styles{
+    <link href="~/lib/webuploader/webuploader.css" rel="stylesheet" />
 }
 @section scripts{
     <script src="~/js/common.js"></script>
     <script src="~/lib/webuploader/webuploader.js"></script>
-    <script>
+    @*<script>
 
-        var $list = $('#thelist');
-        var uploader = WebUploader.create({
-            auto:true,
-            fileVal:'files',
-            withCredentials:true,
-            // 文件接收服务端。
-            server: 'http://localhost:2532/api/upload/img',
+            var $list = $('#thelist');
+            var uploader = WebUploader.create({
+                auto:true,
+                fileVal:'files',
+                withCredentials:true,
+                // 文件接收服务端。
+                server: 'http://localhost:2532/api/upload/img',
 
-            // 选择文件的按钮。可选。
-            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-            pick: '#picker',
+                // 选择文件的按钮。可选。
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                pick: '#picker',
 
-            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
-            resize: false
-        });
+                // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+                resize: false
+            });
 
-        uploader.on( 'fileQueued', function( file ) {
-            $list.append( '<div id="' + file.id + '" class="item">' +
-                '<h4 class="info">' + file.name + '</h4>' +
-                '<p class="state">等待上传...</p>' +
-                '</div>' );
-        });
+            uploader.on( 'fileQueued', function( file ) {
+                $list.append( '<div id="' + file.id + '" class="item">' +
+                    '<h4 class="info">' + file.name + '</h4>' +
+                    '<p class="state">等待上传...</p>' +
+                    '</div>' );
+            });
 
-        uploader.on( 'uploadProgress', function( file, percentage ) {
-            var $li = $( '#'+file.id ),
-                $percent = $li.find('.progress .progress-bar');
+            uploader.on( 'uploadProgress', function( file, percentage ) {
+                var $li = $( '#'+file.id ),
+                    $percent = $li.find('.progress .progress-bar');
 
-            // 避免重复创建
-            if ( !$percent.length ) {
-                $percent = $('<div class="progress progress-striped active">' +
-                    '<div class="progress-bar" role="progressbar" style="width: 0%">' +
-                    '</div>' +
-                    '</div>').appendTo( $li ).find('.progress-bar');
-            }
+                // 避免重复创建
+                if ( !$percent.length ) {
+                    $percent = $('<div class="progress progress-striped active">' +
+                        '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                        '</div>' +
+                        '</div>').appendTo( $li ).find('.progress-bar');
+                }
 
-            $li.find('p.state').text('上传中');
+                $li.find('p.state').text('上传中');
 
-            $percent.css( 'width', percentage * 100 + '%' );
-        });
+                $percent.css( 'width', percentage * 100 + '%' );
+            });
 
-        uploader.on( 'uploadSuccess', function( file ) {
-            $( '#'+file.id ).find('p.state').text('已上传');
-        });
+            uploader.on( 'uploadSuccess', function( file ) {
+                $( '#'+file.id ).find('p.state').text('已上传');
+            });
 
-        uploader.on( 'uploadError', function( file ) {
-            $( '#'+file.id ).find('p.state').text('上传出错');
-        });
+            uploader.on( 'uploadError', function( file ) {
+                $( '#'+file.id ).find('p.state').text('上传出错');
+            });
 
-        uploader.on( 'uploadComplete', function( file ) {
-            $( '#'+file.id ).find('.progress').fadeOut();
-        });
-    </script>
+            uploader.on( 'uploadComplete', function( file ) {
+                $( '#'+file.id ).find('.progress').fadeOut();
+            });
+        </script>*@
     <script>
 
         $('#btn').click(function () {
@@ -107,8 +107,8 @@ else
                 url: "/api/values",
                 type: 'post',
                 data: {
-                    username: '1123131313',
-                    password: 'mima'
+                    username: '数据1',
+                    password: '数据2'
                 },
                 success: function (res) {
                     $('#info').html(JSON.stringify(res));
@@ -128,8 +128,8 @@ else
                 type: 'post',
                 data: {
                     user: {
-                        nickname: 'zhangsan',
-                        age: 2
+                        nickname: $('#nickname').val(),
+                        age: $('#age').val()
                     },
                     book: {
                         name: ".net core 跨平台",

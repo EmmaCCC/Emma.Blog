@@ -37,22 +37,23 @@ namespace Emma.Blog.WebApi.Controllers
         /// <returns></returns>
 
         [HttpPost("Token")]
-        [CaptchaValidate]
+        //[CaptchaValidate]
         public IActionResult Token(string username, string password)
         {
             try
             {
+                //return Ok(new { status = 0});
                 UserService service = new UserService();
                 var claimUser = service.Login(username, password);
                 if (claimUser == null)
                 {
-                    string clientId = HttpContext.Request.Cookies["clientId"];
-                    string code = ValidateCode.GetCode(clientId);
+                    //string clientId = HttpContext.Request.Cookies["clientId"];
+                    //string code = ValidateCode.GetCode(clientId);
                     return Ok(new
                     {
                         status = 1,
                         message = "用户名或者密码错误",
-                        data = new { code }
+                        //data = new { code }
                     });
                 }
                 List<Claim> claims = claimUser.GetClaims();
@@ -69,8 +70,9 @@ namespace Emma.Blog.WebApi.Controllers
                 }); //写回cookie 供web站点用
                 return Ok(new { status = 0, token, refreshToken });
             }
-            catch (ErrorMsgException ex)
+            catch (Exception ex)
             {
+                Common.LogHelper.Error("Error", ex);
                 return Ok(new
                 {
                     status = 1,

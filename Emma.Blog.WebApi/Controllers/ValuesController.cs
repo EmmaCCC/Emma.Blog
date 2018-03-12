@@ -13,12 +13,14 @@ namespace Emma.Blog.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        [SignatureRequired]
+        //[SignatureRequired]
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
+
+
 
 
 

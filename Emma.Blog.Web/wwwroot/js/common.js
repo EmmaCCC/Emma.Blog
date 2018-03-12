@@ -1,4 +1,5 @@
-﻿var api_domain = "http://localhost:21222/";
+﻿var api_domain = "http://localhost:21222";
+//var api_domain = "http://api.songlin.net.cn"
 $.ajaxSetup({
     dataType: 'json',
     xhrFields: {

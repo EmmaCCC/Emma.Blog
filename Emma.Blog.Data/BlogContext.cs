@@ -14,6 +14,8 @@ namespace Emma.Blog.Data
         {
           
             Id = Guid.NewGuid();
+
+
         }
        
 

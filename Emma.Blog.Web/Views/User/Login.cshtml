@@ -11,7 +11,7 @@
 <div class="row" id="login">
     <div id="msg" class="text-danger"></div>
     <div class="col-md-4">
-        <form >
+        <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
@@ -24,15 +24,15 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <div class="form-group" id="vcodeform">
-                <label  class="control-label"></label>
-                <input  class="form-control" v-model="code" />
-                <span id="vcodespan" >验证码：<span id="vcode"></span></span><button  type="button" v-on:click="getCode()">获取验证码</button>
-            </div>
+            @*<div class="form-group" id="vcodeform">
+                <label class="control-label"></label>
+                <input class="form-control" v-model="code" />
+                <span id="vcodespan">验证码：<span id="vcode"></span></span><button type="button" v-on:click="getCode()">获取验证码</button>
+            </div>*@
 
 
             <div class="form-group">
-                <input type="button" value="登录" class="btn btn-default" v-on:click="login(username,password,code)" />
+                <input type="button" value="登录" class="btn btn-default" v-on:click="login(username,password)" />
             </div>
         </form>
     </div>
@@ -45,82 +45,83 @@
 @section scripts{
 
     <script src="~/js/common.js"></script>
+    <script src="~/lib/vue/vue.min.js"></script>
     <script>
 
-    
-
-        var clientId = getCookie('clientId');
-        var isRequireCode = false;
-        if (clientId) {
-            $.ajax({
-                url: '/api/auth/requirecode',
-                type: 'get',
-                success: function (res) {
-                    if (res.status === 0) {
-                        isRequireCode = res.data.isRequired;
-                        if (isRequireCode) {
-                            $('#vcodeform').show();
-                        }
-                        $('#vcode').text(res.data.code);
-                    }
-                }, error: function (res) {
-                    console.log(res);
-                }
-            });
-
-        }
-  
-        if (!clientId) {
-
-            var promise = new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: '/api/auth/clientid',
-                    type: 'get',
-                    success: function (res) {
-                        if (res.status === 0) {
-                            clientId = res.data;
-                            resolve(clientId);
-                        }
-                    }, error: function (res) {
-                        console.log(res);
-                    }
-                });
-            }).then(function(clientId) {
-                $.ajax({
-                    url: '/api/auth/requirecode?clientId=' + clientId,
-                    type: 'get',
-                    success: function (res) {
-                        if (res.status === 0) {
-                            isRequireCode = res.data.isRequired;
-                            if (isRequireCode) {
-                                $('#vcodeform').show();
-                            }
-                            $('#vcode').text(res.data.code);
-                        }
-                    }, error: function (res) {
-                        console.log(res);
-                    }
-                });
-
-            });
 
 
-        }
+        //var clientId = getCookie('clientId');
+        //var isRequireCode = false;
+        //if (clientId) {
+        //    $.ajax({
+        //        url: '/api/auth/requirecode',
+        //        type: 'get',
+        //        success: function (res) {
+        //            if (res.status === 0) {
+        //                isRequireCode = res.data.isRequired;
+        //                if (isRequireCode) {
+        //                    $('#vcodeform').show();
+        //                }
+        //                $('#vcode').text(res.data.code);
+        //            }
+        //        }, error: function (res) {
+        //            console.log(res);
+        //        }
+        //    });
 
-      
+        //}
+
+        //if (!clientId) {
+
+        //    var promise = new Promise(function (resolve, reject) {
+        //        $.ajax({
+        //            url: '/api/auth/clientid',
+        //            type: 'get',
+        //            success: function (res) {
+        //                if (res.status === 0) {
+        //                    clientId = res.data;
+        //                    resolve(clientId);
+        //                }
+        //            }, error: function (res) {
+        //                console.log(res);
+        //            }
+        //        });
+        //    }).then(function(clientId) {
+        //        $.ajax({
+        //            url: '/api/auth/requirecode?clientId=' + clientId,
+        //            type: 'get',
+        //            success: function (res) {
+        //                if (res.status === 0) {
+        //                    isRequireCode = res.data.isRequired;
+        //                    if (isRequireCode) {
+        //                        $('#vcodeform').show();
+        //                    }
+        //                    $('#vcode').text(res.data.code);
+        //                }
+        //            }, error: function (res) {
+        //                console.log(res);
+        //            }
+        //        });
+
+        //    });
+
+
+        //}
+
+
         var vm = new Vue({
             el: '#login',
             data: {
                 username: '',
                 password: '',
-                code:''
+                //code: ''
             },
             methods: {
-                login: function (username, password,code) {
-                    var data = { username, password, clientId }
-                    if (isRequireCode) {
-                        data.code = code;
-                    }
+                login: function (username, password) {
+                    var data = { username, password}
+                    //if (isRequireCode) {
+                    //    data.code = code;
+                    //}
 
                     $.ajax({
                         url: '/api/auth/token',
@@ -138,20 +139,20 @@
                         }
                     });
                 },
-                getCode() {
-                    $.ajax({
-                        url: '/api/auth/getcode',
-                        type: 'get',
-                        success: function (res) {
-                            if (res.status === 0) {
-                                $('#vcode').text(res.data.code);
+                //getCode() {
+                //    $.ajax({
+                //        url: '/api/auth/getcode',
+                //        type: 'get',
+                //        success: function (res) {
+                //            if (res.status === 0) {
+                //                $('#vcode').text(res.data.code);
 
-                            }
-                        }, error: function (res) {
-                            console.log(res);
-                        }
-                    });
-                }
+                //            }
+                //        }, error: function (res) {
+                //            console.log(res);
+                //        }
+                //    });
+                //}
             }
         });
         console.log(vm);

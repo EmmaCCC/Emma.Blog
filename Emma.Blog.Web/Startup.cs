@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Emma.Blog.Web.Models;
+using System.Threading.Tasks;
 
 namespace Emma.Blog.Web
 {
@@ -38,8 +39,8 @@ namespace Emma.Blog.Web
           
             services.AddMvc();
             services.AddDbContext<BlogContext>(options =>
-            //options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
-            options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
+            options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
+            //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
                 );
 
             services.AddAuthentication(options =>
@@ -52,7 +53,6 @@ namespace Emma.Blog.Web
                 opts.LoginPath = "/User/Login";
                 opts.Cookie.Name = "token";
                 opts.TicketDataFormat = new JwtDataFormat(jwt);
-
 
             });
 
