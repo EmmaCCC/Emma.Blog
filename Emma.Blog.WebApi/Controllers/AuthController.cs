@@ -64,11 +64,6 @@ namespace Emma.Blog.WebApi.Controllers
                 claims.Add(new Claim("tokenType", "refresh"));
                 var refreshToken = JwtTokenUtil.Encode(claims, _jwtSettings);
 
-                HttpContext.Response.Cookies.Append("token", token, new Microsoft.AspNetCore.Http.CookieOptions()
-                {
-                    Expires = DateTimeOffset.Now.AddHours(2),
-                    Domain = "*.songlin.net.cn"
-                }); //写回cookie 供web站点用
                 return Ok(new { status = 0, token, refreshToken });
             }
             catch (Exception ex)

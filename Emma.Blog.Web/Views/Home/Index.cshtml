@@ -11,10 +11,7 @@
 else
 {
     <span>欢迎您,@Context.User.Identity.Name，<a asp-action="logout" asp-controller="User">注销</a></span>
-
-
-
-} <span>欢迎您,@ViewBag.Ip</span>
+} <span>欢迎您</span>
 <div>
     <a href="/user/create">添加用户</a>
 </div>
@@ -41,11 +38,17 @@ else
 
     </div>*@
 @section styles{
-    <link href="~/lib/webuploader/webuploader.css" rel="stylesheet" />
+    @*<link href="~/lib/webuploader/webuploader.css" rel="stylesheet" />*@
 }
 @section scripts{
-    <script src="~/js/common.js"></script>
-    <script src="~/lib/webuploader/webuploader.js"></script>
+    <environment include="Development">
+        <script src="~/js/common.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/common.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @*<script src="~/lib/webuploader/webuploader.js"></script>*@
     @*<script>
 
             var $list = $('#thelist');
@@ -109,6 +112,9 @@ else
                 data: {
                     username: '数据1',
                     password: '数据2'
+                },
+                xhrFields: {
+                    withCredentials: true
                 },
                 success: function (res) {
                     $('#info').html(JSON.stringify(res));

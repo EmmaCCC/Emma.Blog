@@ -8,6 +8,7 @@
       "wwwroot/css/site.css"
     ]
   },
+
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
@@ -20,5 +21,20 @@
     },
     // Optionally generate .map file
     "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/common.min.js",
+    "inputFiles": [
+      "wwwroot/js/common.js"
+    ],
+    // Optionally specify minification options
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    // Optionally generate .map file
+    "sourceMap": false
   }
+
+
 ]

@@ -15,8 +15,6 @@ namespace Emma.Blog.Web.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.ConId = HttpContext.Connection.Id;
-                 ViewBag.Ip = HttpContext.Connection.RemoteIpAddress;
             return View();
         }
 

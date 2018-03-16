@@ -36,6 +36,10 @@ namespace Emma.Blog.Web.Extensions
 
             SecurityToken validatedToken;
             var claimsPrincipal = JwtTokenUtil.Decode(protectedText, _jwtSettings, out validatedToken);
+            if(claimsPrincipal == null)
+            {
+                return null;
+            }
             return new AuthenticationTicket(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
         }
 

@@ -82,6 +82,7 @@ namespace Emma.Blog.Web
 
             app.UseAuthentication();
             app.UseStaticFiles();
+            
     
             app.UseMvc(routes =>
             {
