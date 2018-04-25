@@ -15,7 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" v-model="username" />
+                <input asp-for="UserName" class="form-control" v-model="username" id="username"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -23,13 +23,13 @@
                 <input asp-for="Password" class="form-control" v-model="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-
+            <span v-text="username"></span>
             @*<div class="form-group" id="vcodeform">
-                <label class="control-label"></label>
-                <input class="form-control" v-model="code" />
-                <span id="vcodespan">验证码：<span id="vcode"></span></span><button type="button" v-on:click="getCode()">获取验证码</button>
-            </div>*@
-
+            <label class="control-label"></label>
+            <input class="form-control" v-model="code" />
+            <span id="vcodespan">验证码：<span id="vcode"></span></span><button type="button" v-on:click="getCode()">获取验证码</button>
+        </div>*@
+            <button id="update" type="button">修改用户名</button>
 
             <div class="form-group">
                 <input type="button" value="登录" class="btn btn-default" v-on:click="login(username,password)" />
@@ -37,6 +37,7 @@
         </form>
     </div>
 </div>
+
 
 <div>
     <a asp-action="List">Back to List</a>
@@ -47,7 +48,7 @@
     <script src="~/js/common.js"></script>
     <script src="~/lib/vue/vue.min.js"></script>
     <script>
-
+     
 
 
         //var clientId = getCookie('clientId');
@@ -118,7 +119,7 @@
             },
             methods: {
                 login: function (username, password) {
-                    var data = { username, password}
+                    var data = { username, password }
                     //if (isRequireCode) {
                     //    data.code = code;
                     //}
@@ -130,7 +131,7 @@
                         success: function (res) {
                             if (res.status === 1) {
                                 $('#msg').text(res.message);
-                                $('#vcode').text(res.data.code);
+
                             } else {
                                 setCookie('token', res.token, 7200);
                                 window.location.href = '/';
@@ -158,6 +159,6 @@
         });
         console.log(vm);
 
-      
+
     </script>
 }
