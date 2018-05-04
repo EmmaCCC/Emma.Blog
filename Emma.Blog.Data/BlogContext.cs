@@ -15,13 +15,17 @@ namespace Emma.Blog.Data
           
             Id = Guid.NewGuid();
 
-
         }
+       
        
 
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
 
+        public override void Dispose()
+        {
+            base.Dispose();     
+        }
 
     }
 }

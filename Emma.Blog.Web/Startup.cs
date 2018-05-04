@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Emma.Blog.Web.Models;
 using System.Threading.Tasks;
+using Emma.Blog.Common;
 
 namespace Emma.Blog.Web
 {
@@ -23,6 +24,7 @@ namespace Emma.Blog.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Global.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -36,8 +38,11 @@ namespace Emma.Blog.Web
             var jwt = new JwtSettings();
             Configuration.Bind("JwtSettings", jwt);
 
-          
-            services.AddMvc();
+
+            services.AddMvc(opts=>
+            {
+                opts.Filters.Add(typeof(EndRequestFilter));
+            });
             services.AddDbContext<BlogContext>(options =>
             options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
             //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
@@ -57,13 +62,14 @@ namespace Emma.Blog.Web
             });
 
             services.AddScoped(typeof(UserService));
-
             //services.AddAuthorization();//授权，认可；批准，委任
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
+
+         
 
             Service.ServiceProvider.Provider = svp;
             if (env.IsDevelopment())
@@ -90,6 +96,8 @@ namespace Emma.Blog.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+         
         }
     }
 }
