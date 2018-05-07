@@ -24,6 +24,7 @@ namespace Emma.Blog.Data
 
         public override void Dispose()
         {
+            Console.WriteLine("dbContext diposing ");
             base.Dispose();     
         }
 

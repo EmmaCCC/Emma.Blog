@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Emma.Blog.Web.Models;
 using System.Threading.Tasks;
 using Emma.Blog.Common;
+using System.Data;
 
 namespace Emma.Blog.Web
 {
@@ -60,7 +61,7 @@ namespace Emma.Blog.Web
                 opts.TicketDataFormat = new JwtDataFormat(jwt);
 
             });
-
+            services.AddScoped(typeof(IDbConnection), ConnectionFactory.SqlServerFactory);
             services.AddScoped(typeof(UserService));
             //services.AddAuthorization();//授权，认可；批准，委任
         }

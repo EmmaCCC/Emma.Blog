@@ -23,4 +23,8 @@
     <Folder Include="Enums\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Emma.Blog.Common\Emma.Blog.Common.csproj" />
+  </ItemGroup>
+
 </Project>
