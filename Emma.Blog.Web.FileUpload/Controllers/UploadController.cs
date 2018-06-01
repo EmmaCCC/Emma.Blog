@@ -61,7 +61,7 @@ namespace Emma.Blog.Web.FileUpload.Controllers
                 {
                     paths.Add(task.Result);
                 }
-                string domain = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host;
+                string domain = HttpContext.Request.Protocol + "://" + HttpContext.Request.Host;
 
                 return Ok(new { status = 0, domain, paths });
             }
