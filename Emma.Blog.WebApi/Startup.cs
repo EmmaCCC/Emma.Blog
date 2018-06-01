@@ -19,7 +19,8 @@ using Emma.Blog.Service.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using Emma.Blog.Common;
+using System.Data;
 
 namespace Emma.Blog.WebApi
 {
@@ -28,6 +29,7 @@ namespace Emma.Blog.WebApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Global.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -48,8 +50,7 @@ namespace Emma.Blog.WebApi
                 options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
             );
 
-
-
+            services.AddScoped(typeof(IDbConnection), ConnectionFactory.SqlServerFactory);
 
             services.AddAuthentication(opts =>
             {

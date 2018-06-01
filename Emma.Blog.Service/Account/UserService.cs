@@ -22,8 +22,9 @@ namespace Emma.Blog.Service.Account
             }
             return new ClaimUser(user);
 
+          
 
-           
+
         }
 
         public IClaimUser<User> Register(User user)
