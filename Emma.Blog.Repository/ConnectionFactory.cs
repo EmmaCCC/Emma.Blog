@@ -1,17 +1,14 @@
-﻿using Emma.Blog.Common;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
+using Emma.Blog.Common;
 
-namespace Emma.Blog.Data
+namespace Emma.Blog.Repository
 {
     public class ConnectionFactory
     {
         public static IDbConnection SqlServerFactory(IServiceProvider provider)
         {
-            
             var con = new SqlConnection(Global.Configuration.GetSection("ConnectionStrings:SqlServerConnection").Value);
             return con;
         }

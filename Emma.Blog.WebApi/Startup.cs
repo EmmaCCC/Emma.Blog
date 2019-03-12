@@ -21,6 +21,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Emma.Blog.Common;
 using System.Data;
+using System.Reflection;
+using System.Runtime.Loader;
+using Emma.Blog.Model;
+using Emma.Blog.Repository;
 
 namespace Emma.Blog.WebApi
 {
@@ -44,13 +48,13 @@ namespace Emma.Blog.WebApi
             var jwtSettings = new JwtSettings();
             Configuration.Bind("JwtSettings", jwtSettings);
 
-
+            //ef
             services.AddDbContext<BlogContext>(options =>
                 //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"))
                 options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
             );
 
-            services.AddScoped(typeof(IDbConnection), ConnectionFactory.SqlServerFactory);
+         
 
             services.AddAuthentication(opts =>
             {
@@ -81,8 +85,24 @@ namespace Emma.Blog.WebApi
 
             services.AddCors();
             services.AddMvc();
+            //dapper 注入
+            services.AddScoped(typeof(IDbConnection), ConnectionFactory.SqlServerFactory);
+            services.AddScoped(typeof(BaseRepository<>));
 
-          
+            var defaultLoader = AssemblyLoadContext.Default;
+
+            //加载程序集
+            var respository = defaultLoader.LoadFromAssemblyName(new AssemblyName("OYU.Respository.Manager"))
+                .GetTypes().Where(a => a.GetCustomAttribute<InjectAttribute>() != null);
+            var service = defaultLoader.LoadFromAssemblyName(new AssemblyName("Emma.Blog.Service"))
+                .GetTypes().Where(a => a.GetCustomAttribute<InjectAttribute>() != null);
+
+            //批量注入
+            services.Scan(s => s.FromAssembliesOf(respository)
+                .AddClasses().AsSelf().WithScopedLifetime());
+            services.Scan(s => s.FromAssembliesOf(service)
+                .AddClasses().AsSelf().WithScopedLifetime());
+
 
         }
 

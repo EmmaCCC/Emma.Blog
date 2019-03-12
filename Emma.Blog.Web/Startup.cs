@@ -59,7 +59,7 @@ namespace Emma.Blog.Web
                 opts.LoginPath = "/User/Login";
                 opts.Cookie.Name = "token";
                 opts.TicketDataFormat = new JwtDataFormat(jwt);
-
+                
             });
             services.AddScoped(typeof(IDbConnection), ConnectionFactory.SqlServerFactory);
             services.AddScoped(typeof(UserService));
