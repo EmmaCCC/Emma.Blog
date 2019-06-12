@@ -17,6 +17,7 @@ using Emma.Blog.Web.Models;
 using System.Threading.Tasks;
 using Emma.Blog.Common;
 using System.Data;
+using Emma.Blog.Repository;
 
 namespace Emma.Blog.Web
 {

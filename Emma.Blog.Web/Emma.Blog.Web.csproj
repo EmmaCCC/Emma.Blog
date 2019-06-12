@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Emma.Blog.Common\Emma.Blog.Common.csproj" />
+    <ProjectReference Include="..\Emma.Blog.Repository\Emma.Blog.Repository.csproj" />
     <ProjectReference Include="..\Emma.Blog.Service\Emma.Blog.Service.csproj" />
   </ItemGroup>
 
