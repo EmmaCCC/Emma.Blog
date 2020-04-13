@@ -92,7 +92,7 @@ namespace Emma.Blog.WebApi
             var defaultLoader = AssemblyLoadContext.Default;
 
             //加载程序集
-            var respository = defaultLoader.LoadFromAssemblyName(new AssemblyName("OYU.Respository.Manager"))
+            var respository = defaultLoader.LoadFromAssemblyName(new AssemblyName("Emma.Blog.Repository"))
                 .GetTypes().Where(a => a.GetCustomAttribute<InjectAttribute>() != null);
             var service = defaultLoader.LoadFromAssemblyName(new AssemblyName("Emma.Blog.Service"))
                 .GetTypes().Where(a => a.GetCustomAttribute<InjectAttribute>() != null);
