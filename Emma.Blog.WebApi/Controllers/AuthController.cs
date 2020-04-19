@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Emma.Blog.Common;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
-using Emma.Blog.Data;
-using Emma.Blog.WebApi.Models;
-using Emma.Blog.WebApi.Extensions;
+using Emma.Blog.Service.Account.Model;
+using Emma.Blog.Data.Models;
 
 namespace Emma.Blog.WebApi.Controllers
 {
 
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    [ApiController]
+    public class AuthController : ControllerBase
     {
 
         private readonly JwtSettings _jwtSettings;
@@ -38,22 +34,32 @@ namespace Emma.Blog.WebApi.Controllers
 
         [HttpPost("Token")]
         //[CaptchaValidate]
-        public IActionResult Token(string username, string password)
+        public IActionResult Token(LoginDto dto)
         {
             try
             {
                 //return Ok(new { status = 0});
-                UserService service = new UserService();
-                var claimUser = service.Login(username, password);
+                //UserService service = new UserService();
+                ClaimUser claimUser = null;
+                if (dto.UserName == "admin" && dto.Password== "123")
+                {
+                    claimUser =  new ClaimUser(new User()
+                    {
+                        UserId = 1,
+                        UserName = "admin",
+                        Password = "123",
+                        NickName = "songlin"
+                    });
+                }
+                //var claimUser = service.Login(dto.UserName, dto.Password);
                 if (claimUser == null)
                 {
                     //string clientId = HttpContext.Request.Cookies["clientId"];
                     //string code = ValidateCode.GetCode(clientId);
                     return Ok(new
                     {
-                        status = 1,
-                        message = "用户名或者密码错误",
-                        //data = new { code }
+                        code = 1,
+                        msg = "用户名或者密码错误"
                     });
                 }
                 List<Claim> claims = claimUser.GetClaims();
@@ -64,15 +70,15 @@ namespace Emma.Blog.WebApi.Controllers
                 claims.Add(new Claim("tokenType", "refresh"));
                 var refreshToken = JwtTokenUtil.Encode(claims, _jwtSettings);
 
-                return Ok(new { status = 0, token, refreshToken });
+                return Ok(new { code = 0, data = new { token, refreshToken, _jwtSettings.Expires, type = "Bear" } });
             }
             catch (Exception ex)
             {
                 Common.LogHelper.Error("Error", ex);
                 return Ok(new
                 {
-                    status = 1,
-                    message = ex.Message
+                    code = 1,
+                    msg = ex.Message
                 });
             }
         }
@@ -85,9 +91,11 @@ namespace Emma.Blog.WebApi.Controllers
         /// </summary>
         /// <param name="refreshToken"></param>
         /// <returns></returns>
-        [HttpPost("RefreshToken")]
+        [HttpGet("RefreshToken")]
         public IActionResult RefreshToken(string refreshToken)
         {
+            return Token(new LoginDto() { Password = "123", UserName = "admin" });
+
             UserService service = new UserService();
 
             SecurityToken validatedToken;

@@ -11,22 +11,29 @@ using Emma.Blog.WebApi.Models;
 namespace Emma.Blog.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ValuesController : Controller
     {
         //[SignatureRequired]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new { code = 402, msg = "token已失效" }); ;
         }
 
+        //[SignatureRequired]
+        [HttpGet("list")]
+        public IActionResult List()
+        {
+            return Ok(new { code = 0, data = new { list = new List<int>() { 1, 2, 3 } } });
+        }
 
 
 
 
         [Authorize]
         [HttpPost]
-        public IActionResult Post(string username,string password)
+        public IActionResult Post(string username, string password)
         {
             var name = HttpContext.User.Identity.Name;
 
@@ -36,9 +43,9 @@ namespace Emma.Blog.WebApi.Controllers
 
         [Authorize]
         [HttpPost("GetData"), ValidateModel]
-        public IActionResult GetData(UserViewModel user, BookViewModel book,List<string> imgUrls,string name)
+        public IActionResult GetData(UserViewModel user, BookViewModel book, List<string> imgUrls, string name)
         {
-            return Ok(new { status = 0, user,book,imgUrls,name });
+            return Ok(new { status = 0, user, book, imgUrls, name });
         }
 
     }

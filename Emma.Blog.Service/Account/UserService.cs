@@ -15,16 +15,23 @@ namespace Emma.Blog.Service.Account
 
         public IClaimUser<User> Login(string username, string password)
         {
-            var user = context.First<User>(a => a.UserName == username && a.Password == password);
-            if (user == null)
+            //var user = context.First<User>(a => a.UserName == username && a.Password == password);
+            //if (user == null)
+            //{
+            //    return null;
+            //}
+            //return new ClaimUser(user);
+            if (username == "admin" && password == "123")
             {
-                return null;
+                return new ClaimUser(new User()
+                {
+                    UserId = 1,
+                    UserName = "admin",
+                    Password = "123",
+                    NickName = "songlin"
+                });
             }
-            return new ClaimUser(user);
-
-          
-
-
+            return null;
         }
 
         public IClaimUser<User> Register(User user)

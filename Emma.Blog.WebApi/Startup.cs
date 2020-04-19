@@ -6,15 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Emma.Blog.Data;
-using Emma.Blog.Service;
 using Emma.Blog.Service.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +20,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using Emma.Blog.Model;
 using Emma.Blog.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Emma.Blog.WebApi
 {
@@ -64,14 +60,14 @@ namespace Emma.Blog.WebApi
             })
             .AddJwtBearer(opts =>
                 {
-                    opts.Events = new JwtBearerEvents()
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            context.Token = context.HttpContext.Request.Cookies["token"];
-                            return Task.CompletedTask;
-                        }
-                    };
+                    //opts.Events = new JwtBearerEvents()
+                    //{
+                    //    OnMessageReceived = context =>
+                    //    {
+                    //        context.Token = context.HttpContext.Request.Cookies["token"];
+                    //        return Task.CompletedTask;
+                    //    }
+                    //};
 
                     opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                     {
@@ -79,8 +75,7 @@ namespace Emma.Blog.WebApi
                         ValidAudience = jwtSettings.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
                     };
-
-
+                  
                 });
 
             services.AddCors();
@@ -122,7 +117,7 @@ namespace Emma.Blog.WebApi
                 opts.AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins(origins.ToArray())
+                    .AllowAnyOrigin()
                     .SetPreflightMaxAge(TimeSpan.FromDays(60))
             );
             app.UseStaticFiles();
