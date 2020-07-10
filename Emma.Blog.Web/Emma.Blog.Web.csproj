@@ -1,13 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.6.362" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="6.10.5" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore.Design" Version="6.10.5" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />

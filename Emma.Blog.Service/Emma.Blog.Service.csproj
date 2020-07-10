@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Emma.Blog.Common\Emma.Blog.Common.csproj" />
-    <ProjectReference Include="..\Emma.Blog.Data\Emma.Blog.Data.csproj" />
+    <Compile Remove="RegisterLogin\**" />
+    <EmbeddedResource Remove="RegisterLogin\**" />
+    <None Remove="RegisterLogin\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="RegisterLogin\" />
+    <ProjectReference Include="..\Emma.Blog.Common\Emma.Blog.Common.csproj" />
+    <ProjectReference Include="..\Emma.Blog.Data\Emma.Blog.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

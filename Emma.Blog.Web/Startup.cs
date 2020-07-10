@@ -1,6 +1,5 @@
 ﻿using System;
 using Emma.Blog.Data;
-using Emma.Blog.Service;
 using Emma.Blog.Service.Account;
 using Emma.Blog.Service.Auth;
 using Emma.Blog.Web.Extensions;
@@ -13,8 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Emma.Blog.Web.Models;
-using System.Threading.Tasks;
 using Emma.Blog.Common;
 using System.Data;
 using Emma.Blog.Repository;
@@ -44,6 +41,7 @@ namespace Emma.Blog.Web
             services.AddMvc(opts=>
             {
                 opts.Filters.Add(typeof(EndRequestFilter));
+                opts.EnableEndpointRouting = false;
             });
             services.AddDbContext<BlogContext>(options =>
             options.UseMySQL(Configuration.GetConnectionString("MySqlConnection"))
@@ -77,7 +75,6 @@ namespace Emma.Blog.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
